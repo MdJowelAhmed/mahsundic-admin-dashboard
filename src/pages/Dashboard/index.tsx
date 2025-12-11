@@ -328,41 +328,8 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Content Grid */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Common tasks you can perform</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { icon: Users, label: 'Add User', color: 'bg-blue-500/10 text-blue-500' },
-                  { icon: Package, label: 'Add Product', color: 'bg-green-500/10 text-green-500' },
-                  { icon: FolderTree, label: 'Add Category', color: 'bg-purple-500/10 text-purple-500' },
-                  { icon: ShoppingCart, label: 'View Orders', color: 'bg-orange-500/10 text-orange-500' },
-                ].map((action) => (
-                  <Button
-                    key={action.label}
-                    variant="outline"
-                    className="h-auto flex items-center gap-3 p-4 justify-start"
-                  >
-                    <div className={cn('p-2 rounded-lg', action.color)}>
-                      <action.icon className="h-5 w-5" />
-                    </div>
-                    <span className="font-medium text-sm">{action.label}</span>
-                  </Button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+      <div className="">
+   
 
         {/* Recent Activity */}
         <motion.div
