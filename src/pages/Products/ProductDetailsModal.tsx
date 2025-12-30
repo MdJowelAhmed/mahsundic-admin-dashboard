@@ -147,3 +147,4 @@ function DetailItem({ icon: Icon, label, value, highlight }: DetailItemProps) {
 
 
 
+

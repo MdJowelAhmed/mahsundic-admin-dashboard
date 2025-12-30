@@ -165,7 +165,14 @@ export function Sidebar() {
                         : 'text-muted-foreground'
                     )}
                   >
-                    <Settings className="h-5 w-5 flex-shrink-0" />
+                    <Settings
+                      className={cn(
+                        'h-5 w-5 flex-shrink-0',
+                        isSettingsActive
+                          ? 'text-primary'
+                          : 'text-muted-foreground'
+                      )}
+                    />
                   </NavLink>
                 </TooltipTrigger>
                 <TooltipContent side="right">Settings</TooltipContent>
@@ -217,8 +224,17 @@ function SidebarNavItem({ item, collapsed }: SidebarNavItemProps) {
         )
       }
     >
-      <Icon className="h-5 w-5 flex-shrink-0" />
-      {!collapsed && <span className="font-medium">{item.title}</span>}
+      {({ isActive }) => (
+        <>
+          <Icon
+            className={cn(
+              'h-5 w-5 flex-shrink-0',
+              isActive && !collapsed ? 'text-primary-foreground' : isActive && collapsed ? 'text-primary' : 'text-muted-foreground'
+            )}
+          />
+          {!collapsed && <span className="font-medium">{item.title}</span>}
+        </>
+      )}
     </NavLink>
   )
 
@@ -233,6 +249,7 @@ function SidebarNavItem({ item, collapsed }: SidebarNavItemProps) {
 
   return linkContent
 }
+
 
 
 
