@@ -54,8 +54,8 @@ export function Header() {
             <Menu className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-xl font-semibold">{pageTitle}</h1>
-            <p className="text-sm text-muted-foreground hidden sm:block">
+            <h1 className="text-xl font-semibold text-accent">{pageTitle}</h1>
+            <p className="text-sm text-accent hidden sm:block">
               Welcome back, {user?.firstName || 'Admin'}
             </p>
           </div>
@@ -82,9 +82,9 @@ export function Header() {
             onClick={() => dispatch(toggleTheme())}
           >
             {theme === 'light' ? (
-              <Moon className="h-5 w-5" />
+              <Moon className="h-5 w-5 text-accent" />
             ) : (
-              <Sun className="h-5 w-5" />
+              <Sun className="h-5 w-5 text-accent" />
             )}
           </Button>
 
@@ -92,7 +92,7 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
+                <Bell className="h-5 w-5 text-accent" />
                 <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-destructive" />
               </Button>
             </DropdownMenuTrigger>

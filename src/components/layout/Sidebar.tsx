@@ -105,10 +105,10 @@ export function Sidebar() {
         <div className="flex items-center justify-between h-36 px-4 border-b">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">D</span>
+              <span className="text-primary text-white font-bold text-lg">D</span>
             </div>
             {!sidebarCollapsed && (
-              <span className="font-display font-bold text-xl">Dashboard</span>
+              <span className="font-display font-bold text-xl text-accent">Dashboard</span>
             )}
           </div>
           <Button
@@ -118,9 +118,9 @@ export function Sidebar() {
             className="hidden lg:flex"
           >
             {sidebarCollapsed ? (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 text-accent" />
             ) : (
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 text-accent" />
             )}
           </Button>
         </div>
@@ -130,7 +130,7 @@ export function Sidebar() {
           {/* Main Navigation */}
           <div className="space-y-1">
             {!sidebarCollapsed && (
-              <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <p className="px-3 py-2 text-xs font-semibold text-accent-foreground uppercase tracking-wider">
                 Main Menu
               </p>
             )}
@@ -148,7 +148,7 @@ export function Sidebar() {
           {/* Settings Navigation */}
           <div className="space-y-1">
             {!sidebarCollapsed && (
-              <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <p className="px-3 py-2 text-xs font-semibold text-accent-foreground uppercase tracking-wider">
                 Settings
               </p>
             )}
@@ -159,9 +159,9 @@ export function Sidebar() {
                     to="/settings/profile"
                     className={cn(
                       'flex items-center justify-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200',
-                      'hover:bg-accent hover:text-accent-foreground',
+                      'hover:bg-primary hover:text-accent-foreground',
                       isSettingsActive
-                        ? 'bg-primary text-primary-foreground shadow-md'
+                        ? 'bg-primary text-white shadow-md'
                         : 'text-muted-foreground'
                     )}
                   >
@@ -215,12 +215,12 @@ function SidebarNavItem({ item, collapsed }: SidebarNavItemProps) {
       to={item.href}
       className={({ isActive }) =>
         cn(
-          'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200',
-          'hover:bg-accent hover:text-accent-foreground',
+          'flex items-center gap-3 px-3 py-2.5 rounded-sm transition-all duration-200',
+          'hover:bg-[#CEF8DA] hover:text-[#0C5822]',
           collapsed && 'justify-center',
           isActive
-            ? 'bg-primary text-primary-foreground shadow-md'
-            : 'text-muted-foreground'
+            ? 'bg-[#CEF8DA] text-[#0C5822] shadow-md'
+            : 'text-[#656565]'
         )
       }
     >
@@ -229,7 +229,7 @@ function SidebarNavItem({ item, collapsed }: SidebarNavItemProps) {
           <Icon
             className={cn(
               'h-5 w-5 flex-shrink-0',
-              isActive && !collapsed ? 'text-primary-foreground' : isActive && collapsed ? 'text-primary' : 'text-muted-foreground'
+              isActive && !collapsed ? 'text-[#0C5822]' : isActive && collapsed ? 'text-[#0C5822]' : 'text-[#656565]'
             )}
           />
           {!collapsed && <span className="font-medium">{item.title}</span>}
