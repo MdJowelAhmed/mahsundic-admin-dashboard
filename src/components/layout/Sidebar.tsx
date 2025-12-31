@@ -34,6 +34,11 @@ const navItems: NavItem[] = [
     icon: LayoutDashboard,
   },
   {
+    title: 'Booking-management',
+    href: '/booking-management',
+    icon: LayoutDashboard,
+  },
+  {
     title: 'Users',
     href: '/users',
     icon: Users,
