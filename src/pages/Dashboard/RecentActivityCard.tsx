@@ -11,23 +11,10 @@ export function RecentActivityCard() {
             transition={{ duration: 0.3, delay: 0.6 }}
             className="col-span-1 border-none shadow-sm"
         >
-            <Card className="bg-white border-0 shadow-none">
+            <Card className="bg-white border-0">
                 <CardHeader className="flex flex-row items-center justify-between pb-6">
                     <CardTitle className="text-xl font-bold text-slate-800">Car Bookings</CardTitle>
-                    <div className="flex items-center gap-3">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Search client name & car etc."
-                                className="pl-9 pr-4 py-2 border rounded-md text-sm w-[280px] focus:outline-none focus:ring-1 focus:ring-primary/50"
-                            />
-                        </div>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-md text-sm font-medium hover:bg-amber-600 transition-colors">
-                            <Filter className="h-4 w-4" />
-                            Filter
-                        </button>
-                    </div>
+                
                 </CardHeader>
                 <CardContent className="p-0">
                     <div className="w-full overflow-auto">
