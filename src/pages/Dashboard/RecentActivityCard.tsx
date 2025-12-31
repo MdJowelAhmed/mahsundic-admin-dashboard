@@ -30,7 +30,7 @@ export function RecentActivityCard() {
                                     <th className="px-6 py-4 text-right text-sm font-bold">status</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100">
+                            <tbody className="divide-y divide-gray-100 text-accent-foreground">
                                 {carBookingsData.map((booking, index) => (
                                     <motion.tr
                                         key={booking.id}
@@ -46,13 +46,13 @@ export function RecentActivityCard() {
                                             <div className="flex flex-col gap-1 text-xs">
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-gray-500 w-8">Start</span>
-                                                    <span className="bg-amber-400/90 text-white px-2 py-0.5 rounded text-[11px] font-medium min-w-[80px] text-center">
+                                                    <span className="bg-secondary text-white px-3 py-1 rounded text-[11px] font-medium min-w-[80px] text-center">
                                                         {booking.startDate}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-gray-500 w-8">End</span>
-                                                    <span className="bg-[#5C7CFA] text-white px-2 py-0.5 rounded text-[11px] font-medium min-w-[80px] text-center">
+                                                    <span className="bg-primary-foreground text-white px-3 py-1 rounded text-[11px] font-medium min-w-[80px] text-center">
                                                         {booking.endDate}
                                                     </span>
                                                 </div>
@@ -76,9 +76,9 @@ export function RecentActivityCard() {
                                             <div className="flex flex-col items-center gap-1">
                                                 <span className="text-sm font-semibold text-slate-700">{booking.payment}</span>
                                                 <span
-                                                    className={`text-xs px-3 py-0.5 rounded-full font-medium ${booking.paymentStatus === 'Paid'
-                                                            ? 'bg-green-100 text-green-600'
-                                                            : 'bg-red-50 text-red-500'
+                                                    className={`text-xs px-3 py-1 rounded-full font-medium ${booking.paymentStatus === 'Paid'
+                                                            ? 'bg-gray-100 text-green-600'
+                                                            : 'bg-gray-100 text-red-500'
                                                         }`}
                                                 >
                                                     {booking.paymentStatus}
@@ -88,10 +88,10 @@ export function RecentActivityCard() {
                                         <td className="px-6 py-4 text-right">
                                             <button
                                                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-white text-xs font-semibold w-[120px] justify-center transition-colors ${booking.status === 'Completed'
-                                                        ? 'bg-emerald-500 hover:bg-emerald-600'
+                                                        ? 'bg-gray-100 hover:bg-emerald-600'
                                                         : booking.status === 'Running'
-                                                            ? 'bg-cyan-500 hover:bg-cyan-600'
-                                                            : 'bg-indigo-600 hover:bg-indigo-700'
+                                                            ? 'bg-gray-100 hover:bg-cyan-600'
+                                                            : 'bg-gray-100 hover:bg-indigo-700'
                                                     }`}
                                             >
                                                 {booking.status === 'Completed' && <CheckCircle className="h-3.5 w-3.5" />}
