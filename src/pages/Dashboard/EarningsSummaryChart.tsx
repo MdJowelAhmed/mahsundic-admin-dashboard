@@ -104,7 +104,7 @@ export function EarningsSummaryChart({ chartData, selectedYear, onYearChange }: 
                         </Select>
                     </div>
                     <div className="mt-2">
-                        <span className="inline-flex items-center px-3 py-1 rounded-md bg-orange-500 text-white text-xs font-medium">
+                        <span className="inline-flex items-center px-4 py-2 rounded-sm bg-secondary text-white text-xs font-medium">
                             Total Earning
                         </span>
                     </div>

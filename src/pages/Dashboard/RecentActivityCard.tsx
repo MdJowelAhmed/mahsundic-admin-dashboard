@@ -52,7 +52,7 @@ export function RecentActivityCard() {
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-accent-foreground w-8">End</span>
-                                                    <span className="bg-primary-foreground text-white px-3 py-1 rounded text-[11px] font-medium min-w-[80px] text-center">
+                                                    <span className="bg-muted text-white px-3 py-1 rounded text-[11px] font-medium min-w-[80px] text-center">
                                                         {booking.endDate}
                                                     </span>
                                                 </div>
@@ -87,7 +87,7 @@ export function RecentActivityCard() {
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <button
-                                                className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-white text-xs font-semibold w-[120px] justify-center transition-colors ${booking.status === 'Completed'
+                                                className={`inline-flex items-center gap-2 px-4 py-2 rounded-sm text-white text-xs font-semibold w-[120px] justify-center transition-colors ${booking.status === 'Completed'
                                                         ? 'bg-primary hover:bg-primary/80'
                                                         : booking.status === 'Running'
                                                             ? 'bg-secondary-foreground hover:bg-secondary/80'
