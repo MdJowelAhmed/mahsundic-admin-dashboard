@@ -25,7 +25,7 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
       onClose={onClose}
       title="Car Details"
       size="full"
-      className="max-w-6xl bg-white"
+      className="max-w-3xl bg-white"
     >
       <div className="space-y-6">
         {/* Car Image Section */}

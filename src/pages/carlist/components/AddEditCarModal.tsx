@@ -224,11 +224,11 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
       onClose={onClose}
       title={isEditMode ? 'Edit Car' : 'Add New Car'}
       size="full"
-      className="max-w-5xl bg-white"
+      className="max-w-3xl bg-white"
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Grid Layout - 2 Columns */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-3 gap-x-5">
           {/* Car Name */}
           <div className="space-y-1.5">
             <Label htmlFor="name">Car Name</Label>
@@ -313,59 +313,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
             )}
           </div>
 
-          {/* Location */}
-          <div className="space-y-1.5">
-            <Label htmlFor="location">Location</Label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="location"
-                placeholder="IPH Road-04 Mohakhali, Dhaka"
-                className="pl-10"
-                error={!!errors.location}
-                {...register('location')}
-              />
-            </div>
-            {errors.location && (
-              <p className="text-xs text-destructive">{errors.location.message}</p>
-            )}
-          </div>
-
-          {/* Fuel Policy */}
-          <div className="space-y-1.5">
-            <Label htmlFor="fuelPolicy">Fuel Policy</Label>
-            <div className="relative">
-              <Fuel className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="fuelPolicy"
-                placeholder="Fair"
-                className="pl-10"
-                error={!!errors.fuelPolicy}
-                {...register('fuelPolicy')}
-              />
-            </div>
-            {errors.fuelPolicy && (
-              <p className="text-xs text-destructive">{errors.fuelPolicy.message}</p>
-            )}
-          </div>
-
-          {/* Kilometers */}
-          <div className="space-y-1.5">
-            <Label htmlFor="kilometers">Kilometers</Label>
-            <div className="relative">
-              <Gauge className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="kilometers"
-                placeholder="1,400 km free"
-                className="pl-10"
-                error={!!errors.kilometers}
-                {...register('kilometers')}
-              />
-            </div>
-            {errors.kilometers && (
-              <p className="text-xs text-destructive">{errors.kilometers.message}</p>
-            )}
-          </div>
+       
 
           {/* Class */}
           <div className="space-y-1.5">
@@ -439,6 +387,61 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
               <p className="text-xs text-destructive">{errors.amount.message}</p>
             )}
           </div>
+
+
+             {/* Location */}
+             <div className="space-y-1.5">
+            <Label htmlFor="location">Location</Label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="location"
+                placeholder="IPH Road-04 Mohakhali, Dhaka"
+                className="pl-10"
+                error={!!errors.location}
+                {...register('location')}
+              />
+            </div>
+            {errors.location && (
+              <p className="text-xs text-destructive">{errors.location.message}</p>
+            )}
+          </div>
+
+          {/* Fuel Policy */}
+          <div className="space-y-1.5">
+            <Label htmlFor="fuelPolicy">Fuel Policy</Label>
+            <div className="relative">
+              <Fuel className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="fuelPolicy"
+                placeholder="Fair"
+                className="pl-10"
+                error={!!errors.fuelPolicy}
+                {...register('fuelPolicy')}
+              />
+            </div>
+            {errors.fuelPolicy && (
+              <p className="text-xs text-destructive">{errors.fuelPolicy.message}</p>
+            )}
+          </div>
+
+          {/* Kilometers */}
+          <div className="space-y-1.5">
+            <Label htmlFor="kilometers">Kilometers</Label>
+            <div className="relative">
+              <Gauge className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="kilometers"
+                placeholder="1,400 km free"
+                className="pl-10"
+                error={!!errors.kilometers}
+                {...register('kilometers')}
+              />
+            </div>
+            {errors.kilometers && (
+              <p className="text-xs text-destructive">{errors.kilometers.message}</p>
+            )}
+          </div>
         </div>
 
         {/* Insurance & Coverage - TiptapEditor */}
@@ -451,7 +454,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
               setValue('insuranceCoverage', content)
             }}
             placeholder="Enter insurance and coverage details..."
-            className="min-h-[200px]"
+            className="h-[280px]"
           />
         </div>
 
@@ -465,7 +468,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
               setValue('termsConditions', content)
             }}
             placeholder="Enter terms and conditions..."
-            className="min-h-[200px]"
+            className="h-[280px]"
           />
         </div>
 
