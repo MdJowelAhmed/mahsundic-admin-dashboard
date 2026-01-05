@@ -29,11 +29,11 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
     >
       <div className="space-y-6">
         {/* Car Image Section */}
-        <div className="relative w-full h-96 rounded-xl overflow-hidden bg-gray-100">
+        <div className="relative w-full h-96 rounded-xl overflow-hidden bg-gray-100 ">
           <img
             src={car.image}
             alt={car.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover "
             onError={(e) => {
               e.currentTarget.src = 'https://via.placeholder.com/800x400?text=Car+Image'
             }}
