@@ -93,6 +93,55 @@ export interface CategoryFormData {
   image?: File | string
 }
 
+// ==================== Car Types ====================
+export interface Car {
+  id: string
+  name: string
+  description: string
+  image: string
+  images?: string[]
+  doors: number
+  transmission: 'Automatic' | 'Manual'
+  seats: number
+  suitcases?: string
+  location?: string
+  fuelPolicy?: string
+  kilometers?: string
+  climate?: string
+  amount: number
+  priceDuration: string
+  carClass: CarClass
+  insuranceCoverage?: string
+  termsConditions?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CarFormData {
+  name: string
+  doors: number
+  suitcases: string
+  seats: number
+  location: string
+  fuelPolicy: string
+  kilometers: string
+  carClass: CarClass
+  transmission: 'Automatic' | 'Manual'
+  climate: string
+  amount: number
+  insuranceCoverage: string
+  termsConditions: string
+  images?: File[] | string[]
+}
+
+export type CarClass = 'Upper Class' | 'Small Cars' | 'Compact Class' | 'Middle Class' | 'Premium Class'
+
+export interface CarFilters {
+  search: string
+  carClass: CarClass | 'all'
+  transmission: 'Automatic' | 'Manual' | 'all'
+}
+
 // ==================== Pagination Types ====================
 export interface PaginationState {
   page: number
@@ -117,6 +166,9 @@ export type ModalType =
   | 'addCategory' 
   | 'editCategory' 
   | 'deleteCategory'
+  | 'addCar'
+  | 'editCar'
+  | 'deleteCar'
   | null
 
 export interface ModalState {
@@ -209,8 +261,3 @@ export interface BookingFilters {
   search: string
   status: BookingStatus | 'all'
 }
-
-
-
-
-

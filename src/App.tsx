@@ -22,6 +22,7 @@ import ChangePassword from '@/pages/Settings/ChangePassword/ChangePassword'
 import TermsSettings from '@/pages/Settings/Terms/TermsSettings'
 import PrivacySettings from '@/pages/Settings/Privacy/PrivacySettings'
 import BookingManagement from './pages/Booking/BookingManagement'
+import CarList from './pages/carlist/CarList'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -59,6 +60,9 @@ function App() {
           <Route path="users" element={<UserList />} />
           <Route path="booking-management" element={<BookingManagement />} />
           <Route path="users/:id" element={<UserDetails />} />
+          
+          {/* Car Management */}
+          <Route path="cars" element={<CarList />} />
           
           {/* Product Management */}
           <Route path="products" element={<ProductList />} />

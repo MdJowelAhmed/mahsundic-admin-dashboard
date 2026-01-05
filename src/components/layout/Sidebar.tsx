@@ -12,6 +12,7 @@ import {
   Lock,
   FileText,
   Shield,
+  Car,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -52,6 +53,11 @@ const navItems: NavItem[] = [
     title: 'Categories',
     href: '/categories',
     icon: FolderTree,
+  },
+  {
+    title: 'Car List',
+    href: '/cars',
+    icon: Car,
   },
 ]
 

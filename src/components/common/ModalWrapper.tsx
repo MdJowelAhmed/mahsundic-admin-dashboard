@@ -37,16 +37,23 @@ export function ModalWrapper({
 }: ModalWrapperProps) {
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className={cn(sizeClasses[size], className)}>
-        <DialogHeader>
+      <DialogContent className={cn(sizeClasses[size], className, 'flex flex-col max-h-[90vh]')}>
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        {children}
+        <div className="flex-1 overflow-y-auto pr-2 -mr-2 scrollbar-thin">
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   )
 }
+
+
+
+
+
 
 
 
