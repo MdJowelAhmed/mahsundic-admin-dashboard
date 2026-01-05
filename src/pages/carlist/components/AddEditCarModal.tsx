@@ -259,18 +259,17 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Doors */}
           <div className="space-y-1.5">
-            <Label htmlFor="doors">Doors</Label>
-            <div className="relative">
-              <DoorOpen className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="doors"
-                type="number"
-                placeholder="4"
-                className="pl-10"
-                error={!!errors.doors}
-                {...register('doors', { valueAsNumber: true })}
-              />
+            <div className="flex items-center gap-2">
+              <DoorOpen className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="doors">Doors</Label>
             </div>
+            <Input
+              id="doors"
+              type="number"
+              placeholder="4"
+              error={!!errors.doors}
+              {...register('doors', { valueAsNumber: true })}
+            />
             {errors.doors && (
               <p className="text-xs text-destructive">{errors.doors.message}</p>
             )}
@@ -278,17 +277,16 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Suitcases */}
           <div className="space-y-1.5">
-            <Label htmlFor="suitcases">Suitcases</Label>
-            <div className="relative">
-              <Luggage className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="suitcases"
-                placeholder="2 Suitcases"
-                className="pl-10"
-                error={!!errors.suitcases}
-                {...register('suitcases')}
-              />
+            <div className="flex items-center gap-2">
+              <Luggage className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="suitcases">Suitcases</Label>
             </div>
+            <Input
+              id="suitcases"
+              placeholder="2 Suitcases"
+              error={!!errors.suitcases}
+              {...register('suitcases')}
+            />
             {errors.suitcases && (
               <p className="text-xs text-destructive">{errors.suitcases.message}</p>
             )}
@@ -296,18 +294,17 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Seats */}
           <div className="space-y-1.5">
-            <Label htmlFor="seats">Seats</Label>
-            <div className="relative">
-              <Users className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="seats"
-                type="number"
-                placeholder="5"
-                className="pl-10"
-                error={!!errors.seats}
-                {...register('seats', { valueAsNumber: true })}
-              />
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="seats">Seats</Label>
             </div>
+            <Input
+              id="seats"
+              type="number"
+              placeholder="5"
+              error={!!errors.seats}
+              {...register('seats', { valueAsNumber: true })}
+            />
             {errors.seats && (
               <p className="text-xs text-destructive">{errors.seats.message}</p>
             )}
@@ -330,25 +327,25 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Transmission */}
           <div className="space-y-1.5">
-            <Label htmlFor="transmission">Transmission</Label>
-            <div className="relative">
-              <Settings className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10 pointer-events-none" />
-              <Select
-                value={watch('transmission')}
-                onValueChange={(value) => setValue('transmission', value as 'Automatic' | 'Manual')}
-              >
-                <SelectTrigger className="pl-10" error={!!errors.transmission}>
-                  <SelectValue placeholder="Automatic" />
-                </SelectTrigger>
-                <SelectContent>
-                  {transmissionOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="flex items-center gap-2">
+              <Settings className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="transmission">Transmission</Label>
             </div>
+            <Select
+              value={watch('transmission')}
+              onValueChange={(value) => setValue('transmission', value as 'Automatic' | 'Manual')}
+            >
+              <SelectTrigger error={!!errors.transmission}>
+                <SelectValue placeholder="Automatic" />
+              </SelectTrigger>
+              <SelectContent>
+                {transmissionOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {errors.transmission && (
               <p className="text-xs text-destructive">{errors.transmission.message}</p>
             )}
@@ -356,17 +353,16 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Climate */}
           <div className="space-y-1.5">
-            <Label htmlFor="climate">Climate</Label>
-            <div className="relative">
-              <Snowflake className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="climate"
-                placeholder="Automatic"
-                className="pl-10"
-                error={!!errors.climate}
-                {...register('climate')}
-              />
+            <div className="flex items-center gap-2">
+              <Snowflake className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="climate">Climate</Label>
             </div>
+            <Input
+              id="climate"
+              placeholder="Automatic"
+              error={!!errors.climate}
+              {...register('climate')}
+            />
             {errors.climate && (
               <p className="text-xs text-destructive">{errors.climate.message}</p>
             )}
@@ -391,17 +387,16 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
              {/* Location */}
              <div className="space-y-1.5">
-            <Label htmlFor="location">Location</Label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="location"
-                placeholder="IPH Road-04 Mohakhali, Dhaka"
-                className="pl-10"
-                error={!!errors.location}
-                {...register('location')}
-              />
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="location">Location</Label>
             </div>
+            <Input
+              id="location"
+              placeholder="IPH Road-04 Mohakhali, Dhaka"
+              error={!!errors.location}
+              {...register('location')}
+            />
             {errors.location && (
               <p className="text-xs text-destructive">{errors.location.message}</p>
             )}
@@ -409,17 +404,16 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Fuel Policy */}
           <div className="space-y-1.5">
-            <Label htmlFor="fuelPolicy">Fuel Policy</Label>
-            <div className="relative">
-              <Fuel className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="fuelPolicy"
-                placeholder="Fair"
-                className="pl-10"
-                error={!!errors.fuelPolicy}
-                {...register('fuelPolicy')}
-              />
+            <div className="flex items-center gap-2">
+              <Fuel className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="fuelPolicy">Fuel Policy</Label>
             </div>
+            <Input
+              id="fuelPolicy"
+              placeholder="Fair"
+              error={!!errors.fuelPolicy}
+              {...register('fuelPolicy')}
+            />
             {errors.fuelPolicy && (
               <p className="text-xs text-destructive">{errors.fuelPolicy.message}</p>
             )}
@@ -427,17 +421,16 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Kilometers */}
           <div className="space-y-1.5">
-            <Label htmlFor="kilometers">Kilometers</Label>
-            <div className="relative">
-              <Gauge className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="kilometers"
-                placeholder="1,400 km free"
-                className="pl-10"
-                error={!!errors.kilometers}
-                {...register('kilometers')}
-              />
+            <div className="flex items-center gap-2">
+              <Gauge className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="kilometers">Kilometers</Label>
             </div>
+            <Input
+              id="kilometers"
+              placeholder="1,400 km free"
+              error={!!errors.kilometers}
+              {...register('kilometers')}
+            />
             {errors.kilometers && (
               <p className="text-xs text-destructive">{errors.kilometers.message}</p>
             )}

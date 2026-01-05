@@ -26,7 +26,7 @@ export function CarFilterDropdown({ value, onChange, className }: CarFilterDropd
         <Button
           variant="outline"
           className={cn(
-            'bg-orange-500 hover:bg-orange-600 text-white border-orange-500',
+            'bg-secondary hover:bg-secondary/80 text-white border-secondary hover:text-white',
             'flex items-center gap-2',
             className
           )}

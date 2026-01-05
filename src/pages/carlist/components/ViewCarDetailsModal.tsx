@@ -239,7 +239,7 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
                     content={car.insuranceCoverage}
                     onChange={() => {}}
                     editable={false}
-                    className="min-h-[200px]"
+                    className="h-[280px]"
                   />
                 </CardContent>
               </Card>
@@ -259,7 +259,7 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
                     content={car.termsConditions}
                     onChange={() => {}}
                     editable={false}
-                    className="min-h-[200px]"
+                    className="h-[280px]"
                   />
                 </CardContent>
               </Card>

@@ -43,8 +43,8 @@ export function CarTable({ cars, onEdit, onView, onDelete }: CarTableProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * index }}
                 className={cn(
-                  'hover:bg-gray-50/50 transition-colors',
-                  index === 0 && ''
+                  'hover:border  transition-colors',
+                  
                 )}
               >
                 {/* Car Name Column */}
