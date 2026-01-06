@@ -51,6 +51,8 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
   const { toast } = useToast()
   const [photo, setPhoto] = useState<File | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string>('')
+  const [licenseFile, setLicenseFile] = useState<File | null>(null)
+  const [licensePreview, setLicensePreview] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isEditMode = !!client
@@ -89,6 +91,7 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
           licenseNumber: client.licenseNumber || '',
         })
         setPhotoPreview(client.avatar || '')
+        setLicensePreview(client.licenseDocumentUrl || '')
       } else {
         reset({
           name: '',
@@ -101,6 +104,8 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
         })
         setPhoto(null)
         setPhotoPreview('')
+        setLicenseFile(null)
+        setLicensePreview('')
       }
     }
   }, [open, isEditMode, client, reset])
@@ -122,6 +127,23 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
     setPhotoPreview('')
   }
 
+  const handleLicenseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setLicenseFile(file)
+      const reader = new FileReader()
+      reader.onload = () => {
+        setLicensePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const removeLicense = () => {
+    setLicenseFile(null)
+    setLicensePreview('')
+  }
+
   const onSubmit = async (data: ClientFormData) => {
     setIsSubmitting(true)
 
@@ -137,6 +159,7 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
       fullAddress: data.fullAddress,
       gender: data.gender,
       licenseNumber: data.licenseNumber,
+      licenseDocumentUrl: licensePreview || client?.licenseDocumentUrl,
       status: isEditMode && client ? client.status : 'requested',
       avatar: photoPreview || client?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.name}`,
       createdAt: isEditMode && client ? client.createdAt : new Date().toISOString(),
@@ -297,57 +320,130 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
         </div>
 
         {/* File Upload Section */}
-        <div className="space-y-2">
-          <Label>Photos</Label>
-          <div
-            className={cn(
-              'border-2 border-dashed rounded-lg p-6 transition-colors',
-              'border-green-300 bg-green-50/30 hover:border-green-400'
-            )}
-          >
-            {photoPreview ? (
-              <div className="relative inline-block">
-                <img
-                  src={photoPreview}
-                  alt="Preview"
-                  className="w-32 h-32 object-cover rounded-lg"
-                />
-                <button
-                  type="button"
-                  onClick={removePhoto}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center gap-3">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="rounded-full bg-purple-100 p-3">
-                    <Upload className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <p className="text-sm font-medium text-gray-700">
-                    Photos, Jpg, Png...
-                  </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Profile Photo */}
+          <div className="space-y-2">
+            <Label>Profile Photo</Label>
+            <div
+              className={cn(
+                'border-2 border-dashed rounded-lg p-6 transition-colors',
+                'border-green-300 bg-green-50/30 hover:border-green-400'
+              )}
+            >
+              {photoPreview ? (
+                <div className="relative inline-block">
+                  <img
+                    src={photoPreview}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
+                  <button
+                    type="button"
+                    onClick={removePhoto}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
                 </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="bg-secondary hover:bg-secondary/80 text-white border-secondary hover:text-white"
-                  onClick={() => document.getElementById('client-photo')?.click()}
-                >
-                  Select files
-                </Button>
-                <input
-                  id="client-photo"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handlePhotoChange}
-                />
-              </div>
-            )}
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="rounded-full bg-purple-100 p-3">
+                      <Upload className="h-6 w-6 text-purple-600" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-700">
+                      Photos, Jpg, Png...
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="bg-secondary hover:bg-secondary/80 text-white border-secondary hover:text-white"
+                    onClick={() => document.getElementById('client-photo')?.click()}
+                  >
+                    Select files
+                  </Button>
+                  <input
+                    id="client-photo"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePhotoChange}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* License Document Upload */}
+          <div className="space-y-2">
+            <Label>License Document (Image/PDF)</Label>
+            <div
+              className={cn(
+                'border-2 border-dashed rounded-lg p-6 transition-colors',
+                'border-blue-300 bg-blue-50/30 hover:border-blue-400'
+              )}
+            >
+              {licensePreview ? (
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    {/* If it's a data URL for an image, show thumbnail; otherwise just show text */}
+                    {licensePreview.startsWith('data:image') ? (
+                      <img
+                        src={licensePreview}
+                        alt="License Preview"
+                        className="w-20 h-20 object-contain rounded-md border"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 flex items-center justify-center rounded-md border bg-white text-xs text-gray-600 text-center px-2">
+                        License file selected
+                      </div>
+                    )}
+                    <div className="text-sm text-gray-700">
+                      <p className="font-medium">License document attached</p>
+                      <p className="text-xs text-gray-500">
+                        This will be used for admin verification.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={removeLicense}
+                    className="bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="rounded-full bg-blue-100 p-3">
+                      <Upload className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-700 text-center">
+                      Upload license image or PDF for verification
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="border-blue-400 text-blue-700 hover:bg-blue-50"
+                    onClick={() => document.getElementById('client-license')?.click()}
+                  >
+                    Select license file
+                  </Button>
+                  <input
+                    id="client-license"
+                    type="file"
+                    accept="image/*,application/pdf"
+                    className="hidden"
+                    onChange={handleLicenseChange}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
