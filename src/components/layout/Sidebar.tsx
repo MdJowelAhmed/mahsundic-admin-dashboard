@@ -14,6 +14,7 @@ import {
   Shield,
   Car,
   Building,
+  Calendar,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -64,6 +65,11 @@ const navItems: NavItem[] = [
     title: 'Agency Management',
     href: '/agency-management',
     icon: Building,
+  },
+  {
+    title: 'Calender',
+    href: '/calender',
+    icon: Calendar,
   },
   {
     title: 'Client Management',

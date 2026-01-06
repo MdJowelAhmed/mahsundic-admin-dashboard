@@ -25,6 +25,7 @@ import BookingManagement from './pages/Booking/BookingManagement'
 import CarList from './pages/carlist/CarList'
 import ClientManagement from './pages/ClientManagement/ClientManagement'
 import AgencyManagement from './pages/agency-management/AgencyManagement'
+import Calender from './pages/calender/Calender'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -71,6 +72,9 @@ function App() {
           
           {/* Agency Management */}
           <Route path="agency-management" element={<AgencyManagement />} />
+
+          {/* Calender */}
+          <Route path="calender" element={<Calender />} />
           
           {/* Product Management */}
           <Route path="products" element={<ProductList />} />

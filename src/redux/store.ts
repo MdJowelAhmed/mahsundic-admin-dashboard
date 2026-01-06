@@ -8,6 +8,7 @@ import bookingReducer from './slices/bookingSlice'
 import carReducer from './slices/carSlice'
 import clientReducer from './slices/clientSlice'
 import agencyReducer from './slices/agencySlice'
+import calendarReducer from './slices/calendarSlice'
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     cars: carReducer,
     clients: clientReducer,
     agencies: agencyReducer,
+    calendar: calendarReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

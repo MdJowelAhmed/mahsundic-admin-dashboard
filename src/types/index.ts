@@ -271,6 +271,20 @@ export interface BookingFilters {
   status: BookingStatus | 'all'
 }
 
+// ==================== Calendar Types ====================
+export type CalendarViewRange = 10 | 15 | 30
+
+export type CalendarPeriod = 'current' | 'previous'
+
+export interface CalendarDay {
+  /** ISO date string */
+  date: string
+  /** Short weekday label, e.g. Mon, Tue */
+  label: string
+  /** Day of month number */
+  dayNumber: number
+}
+
 // ==================== Client Types ====================
 export interface Client {
   id: string
