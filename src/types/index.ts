@@ -304,3 +304,39 @@ export interface ClientFormData {
   country: string
   photo?: File | string
 }
+
+// ==================== Agency Types ====================
+export type AgencyStatus = 'active' | 'inactive'
+
+export interface Agency {
+  id: string
+  name: string
+  ownerName: string
+  phone: string
+  email: string
+  country: string
+  address: string
+  totalCars: number
+  completedOrders: number
+  status: AgencyStatus
+  logo?: string
+  documents?: string[]
+  createdAt: string
+  updatedAt: string
+}
+
+export interface AgencyFilters {
+  search: string
+  status: AgencyStatus | 'all'
+}
+
+export interface AgencyFormData {
+  name: string
+  ownerName: string
+  phone: string
+  email: string
+  country: string
+  address: string
+  logo?: File | string
+  documents?: File[] | string[]
+}

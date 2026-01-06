@@ -13,6 +13,7 @@ import {
   FileText,
   Shield,
   Car,
+  Building,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -58,6 +59,11 @@ const navItems: NavItem[] = [
     title: 'Car List',
     href: '/cars',
     icon: Car,
+  },
+  {
+    title: 'Agency Management',
+    href: '/agency-management',
+    icon: Building,
   },
   {
     title: 'Client Management',

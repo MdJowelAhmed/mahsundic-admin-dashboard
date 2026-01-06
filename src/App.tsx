@@ -24,6 +24,7 @@ import PrivacySettings from '@/pages/Settings/Privacy/PrivacySettings'
 import BookingManagement from './pages/Booking/BookingManagement'
 import CarList from './pages/carlist/CarList'
 import ClientManagement from './pages/ClientManagement/ClientManagement'
+import AgencyManagement from './pages/agency-management/AgencyManagement'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -67,6 +68,9 @@ function App() {
           
           {/* Client Management */}
           <Route path="clients" element={<ClientManagement />} />
+          
+          {/* Agency Management */}
+          <Route path="agency-management" element={<AgencyManagement />} />
           
           {/* Product Management */}
           <Route path="products" element={<ProductList />} />
