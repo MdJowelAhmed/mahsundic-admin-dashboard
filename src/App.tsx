@@ -26,6 +26,7 @@ import CarList from './pages/carlist/CarList'
 import ClientManagement from './pages/ClientManagement/ClientManagement'
 import AgencyManagement from './pages/agency-management/AgencyManagement'
 import Calender from './pages/calender/Calender'
+import TransactionsHistory from './pages/transictions-history/TransactionsHistory'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -75,9 +76,13 @@ function App() {
 
           {/* Calender */}
           <Route path="calender" element={<Calender />} />
+
+
           
           {/* Product Management */}
           <Route path="products" element={<ProductList />} />
+
+          <Route path="transactions-history" element={<TransactionsHistory />} />
           
           {/* Category Management */}
           <Route path="categories" element={<CategoryList />} />

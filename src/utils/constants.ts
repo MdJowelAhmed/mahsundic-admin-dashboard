@@ -46,6 +46,10 @@ export const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   inactive: { bg: 'bg-muted', text: 'text-muted-foreground' },
   draft: { bg: 'bg-muted', text: 'text-muted-foreground' },
   out_of_stock: { bg: 'bg-destructive/10', text: 'text-destructive' },
+  Pending: { bg: 'bg-orange-100', text: 'text-orange-800' },
+  Completed: { bg: 'bg-green-100', text: 'text-green-800' },
+  Failed: { bg: 'bg-red-100', text: 'text-red-800' },
+  Cancelled: { bg: 'bg-gray-100', text: 'text-gray-800' },
 }
 
 export const ROLE_COLORS: Record<string, { bg: string; text: string }> = {
@@ -57,6 +61,7 @@ export const ROLE_COLORS: Record<string, { bg: string; text: string }> = {
 
 export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
+
 
 
 

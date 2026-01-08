@@ -354,3 +354,26 @@ export interface AgencyFormData {
   logo?: File | string
   documents?: File[] | string[]
 }
+
+// ==================== Transaction Types ====================
+export type TransactionStatus = 'Pending' | 'Completed' | 'Failed' | 'Cancelled'
+
+export interface Transaction {
+  id: string
+  transactionId: string
+  date: string
+  userName: string
+  email: string
+  amount: number
+  currency?: string
+  status: TransactionStatus
+  paymentMethod?: string
+  description?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface TransactionFilters {
+  search: string
+  status: TransactionStatus | 'all'
+}

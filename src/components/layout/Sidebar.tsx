@@ -15,6 +15,7 @@ import {
   Car,
   Building,
   Calendar,
+  CreditCard,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -70,6 +71,11 @@ const navItems: NavItem[] = [
     title: 'Calender',
     href: '/calender',
     icon: Calendar,
+  },
+  {
+    title: 'Transactions History',
+    href: '/transactions-history',
+    icon: CreditCard,
   },
   {
     title: 'Client Management',
