@@ -27,6 +27,7 @@ import ClientManagement from './pages/ClientManagement/ClientManagement'
 import AgencyManagement from './pages/agency-management/AgencyManagement'
 import Calender from './pages/calender/Calender'
 import TransactionsHistory from './pages/transictions-history/TransactionsHistory'
+import FAQ from './pages/FAQ/FAQ'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -93,6 +94,7 @@ function App() {
             <Route path="password" element={<ChangePassword />} />
             <Route path="terms" element={<TermsSettings />} />
             <Route path="privacy" element={<PrivacySettings />} />
+            <Route path="faq" element={<FAQ />} />
           </Route>
         </Route>
 

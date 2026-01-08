@@ -16,6 +16,7 @@ import {
   Building,
   Calendar,
   CreditCard,
+  HelpCircle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -104,6 +105,11 @@ const settingsItems: NavItem[] = [
     title: 'Privacy',
     href: '/settings/privacy',
     icon: Shield,
+  },
+  {
+    title: 'FAQ',
+    href: '/settings/faq',
+    icon: HelpCircle,
   },
 ]
 

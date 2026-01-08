@@ -355,6 +355,29 @@ export interface AgencyFormData {
   documents?: File[] | string[]
 }
 
+// ==================== FAQ Types ====================
+export type FAQPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+
+export interface FAQ {
+  id: string
+  question: string
+  answer: string
+  position: FAQPosition
+  createdAt: string
+  updatedAt: string
+}
+
+export interface FAQFilters {
+  search: string
+  position: FAQPosition | 'all'
+}
+
+export interface FAQFormData {
+  question: string
+  answer: string
+  position: FAQPosition
+}
+
 // ==================== Transaction Types ====================
 export type TransactionStatus = 'Pending' | 'Completed' | 'Failed' | 'Cancelled'
 
