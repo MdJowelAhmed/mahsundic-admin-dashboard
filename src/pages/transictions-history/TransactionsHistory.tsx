@@ -9,10 +9,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { SearchInput } from '@/components/common/SearchInput'
 import { TransactionTable } from './components/TransactionTable'
 import { ViewTransactionDetailsModal } from './components/ViewTransactionDetailsModal'
-import { mockTransactions } from './transactionData'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { setFilters, setPage, setLimit } from '@/redux/slices/transactionSlice'
+import { useUrlString, useUrlNumber } from '@/hooks/useUrlState'
 import type { Transaction, TransactionStatus } from '@/types'
 
 const STATUS_OPTIONS: { value: TransactionStatus | 'all'; label: string }[] =
@@ -25,52 +34,49 @@ const STATUS_OPTIONS: { value: TransactionStatus | 'all'; label: string }[] =
   ]
 
 export default function TransactionsHistory() {
+  const dispatch = useAppDispatch()
+
   // Modal state
   const [isViewModalOpen, setIsViewModalOpen] = useState(false)
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null)
 
-  // Filter and search state
-  const [searchQuery, setSearchQuery] = useState('')
-  const [statusFilter, setStatusFilter] = useState<TransactionStatus | 'all'>(
-    'all'
+  // URL state management
+  const [searchQuery, setSearchQuery] = useUrlString('search', '')
+  const [statusFilter, setStatusFilter] = useUrlString('status', 'all')
+  const [currentPage, setCurrentPage] = useUrlNumber('page', 1)
+  const [itemsPerPage, setItemsPerPage] = useUrlNumber('limit', 10)
+
+  // Redux state
+  const { filteredList, pagination } = useAppSelector(
+    (state) => state.transactions
   )
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(10)
+  // Sync URL state with Redux filters
+  useEffect(() => {
+    dispatch(
+      setFilters({
+        search: searchQuery,
+        status: statusFilter as TransactionStatus | 'all',
+      })
+    )
+  }, [searchQuery, statusFilter, dispatch])
 
-  // Filter transactions
-  const filteredTransactions = useMemo(() => {
-    return mockTransactions.filter((transaction) => {
-      const matchesSearch =
-        searchQuery === '' ||
-        transaction.transactionId
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        transaction.userName
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        transaction.email.toLowerCase().includes(searchQuery.toLowerCase())
+  // Sync URL pagination with Redux
+  useEffect(() => {
+    dispatch(setPage(currentPage))
+  }, [currentPage, dispatch])
 
-      const matchesStatus =
-        statusFilter === 'all' || transaction.status === statusFilter
-
-      return matchesSearch && matchesStatus
-    })
-  }, [searchQuery, statusFilter])
+  useEffect(() => {
+    dispatch(setLimit(itemsPerPage))
+  }, [itemsPerPage, dispatch])
 
   // Pagination
-  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage)
+  const totalPages = pagination.totalPages
   const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage
-    return filteredTransactions.slice(startIndex, startIndex + itemsPerPage)
-  }, [filteredTransactions, currentPage, itemsPerPage])
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [searchQuery, statusFilter])
+    const startIndex = (pagination.page - 1) * pagination.limit
+    return filteredList.slice(startIndex, startIndex + pagination.limit)
+  }, [filteredList, pagination.page, pagination.limit])
 
   // Handlers
   const handleView = (transaction: Transaction) => {
@@ -86,15 +92,15 @@ export default function TransactionsHistory() {
       }
     } else {
       pages.push(1)
-      if (currentPage > 3) pages.push('...')
+      if (pagination.page > 3) pages.push('...')
       for (
-        let i = Math.max(2, currentPage - 1);
-        i <= Math.min(totalPages - 1, currentPage + 1);
+        let i = Math.max(2, pagination.page - 1);
+        i <= Math.min(totalPages - 1, pagination.page + 1);
         i++
       ) {
         if (!pages.includes(i)) pages.push(i)
       }
-      if (currentPage < totalPages - 2) pages.push('...')
+      if (pagination.page < totalPages - 2) pages.push('...')
       if (!pages.includes(totalPages)) pages.push(totalPages)
     }
     return pages
@@ -162,28 +168,29 @@ export default function TransactionsHistory() {
           <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <span>Result Per Page</span>
-              <select
-                value={itemsPerPage}
-                onChange={(e) => {
-                  setItemsPerPage(Number(e.target.value))
-                  setCurrentPage(1)
-                }}
-                className="w-[70px] h-8 px-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <Select
+                value={String(itemsPerPage)}
+                onValueChange={(val) => setItemsPerPage(Number(val))}
               >
-                {[10, 25, 50, 100].map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-[70px] h-8">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {[10, 25, 50, 100].map((option) => (
+                    <SelectItem key={option} value={String(option)}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(Math.max(1, pagination.page - 1))}
+                disabled={pagination.page === 1}
                 className="text-gray-600"
               >
                 <ChevronLeft className="h-4 w-4 mr-1" />
@@ -195,11 +202,11 @@ export default function TransactionsHistory() {
                   typeof page === 'number' ? (
                     <Button
                       key={index}
-                      variant={currentPage === page ? 'default' : 'outline'}
+                      variant={pagination.page === page ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setCurrentPage(page)}
                       className={`w-8 h-8 ${
-                        currentPage === page
+                        pagination.page === page
                           ? 'bg-green-600 text-white hover:bg-green-700'
                           : 'text-gray-600'
                       }`}
@@ -218,9 +225,9 @@ export default function TransactionsHistory() {
                 variant="outline"
                 size="sm"
                 onClick={() =>
-                  setCurrentPage(Math.min(totalPages, currentPage + 1))
+                  setCurrentPage(Math.min(totalPages, pagination.page + 1))
                 }
-                disabled={currentPage === totalPages}
+                disabled={pagination.page === totalPages}
                 className="text-gray-600"
               >
                 Next

@@ -9,6 +9,7 @@ import carReducer from './slices/carSlice'
 import clientReducer from './slices/clientSlice'
 import agencyReducer from './slices/agencySlice'
 import calendarReducer from './slices/calendarSlice'
+import transactionReducer from './slices/transactionSlice'
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     clients: clientReducer,
     agencies: agencyReducer,
     calendar: calendarReducer,
+    transactions: transactionReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
