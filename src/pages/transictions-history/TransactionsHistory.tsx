@@ -1,110 +1,109 @@
-import { useEffect, useMemo, useState } from 'react'
-import { motion } from 'framer-motion'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
+import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { SearchInput } from '@/components/common/SearchInput'
-import { TransactionTable } from './components/TransactionTable'
-import { ViewTransactionDetailsModal } from './components/ViewTransactionDetailsModal'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { setFilters, setPage, setLimit } from '@/redux/slices/transactionSlice'
-import { useUrlString, useUrlNumber } from '@/hooks/useUrlState'
-import type { Transaction, TransactionStatus } from '@/types'
+} from "@/components/ui/select";
+import { SearchInput } from "@/components/common/SearchInput";
+import { TransactionTable } from "./components/TransactionTable";
+import { ViewTransactionDetailsModal } from "./components/ViewTransactionDetailsModal";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setFilters, setPage, setLimit } from "@/redux/slices/transactionSlice";
+import { useUrlString, useUrlNumber } from "@/hooks/useUrlState";
+import type { Transaction, TransactionStatus } from "@/types";
 
-const STATUS_OPTIONS: { value: TransactionStatus | 'all'; label: string }[] =
-  [
-    { value: 'all', label: 'All Status' },
-    { value: 'Pending', label: 'Pending' },
-    { value: 'Completed', label: 'Completed' },
-    { value: 'Failed', label: 'Failed' },
-    { value: 'Cancelled', label: 'Cancelled' },
-  ]
+const STATUS_OPTIONS: { value: TransactionStatus | "all"; label: string }[] = [
+  { value: "all", label: "All Status" },
+  { value: "Pending", label: "Pending" },
+  { value: "Completed", label: "Completed" },
+  { value: "Failed", label: "Failed" },
+  { value: "Cancelled", label: "Cancelled" },
+];
 
 export default function TransactionsHistory() {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   // Modal state
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false)
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null)
+    useState<Transaction | null>(null);
 
   // URL state management
-  const [searchQuery, setSearchQuery] = useUrlString('search', '')
-  const [statusFilter, setStatusFilter] = useUrlString('status', 'all')
-  const [currentPage, setCurrentPage] = useUrlNumber('page', 1)
-  const [itemsPerPage, setItemsPerPage] = useUrlNumber('limit', 10)
+  const [searchQuery, setSearchQuery] = useUrlString("search", "");
+  const [statusFilter, setStatusFilter] = useUrlString("status", "all");
+  const [currentPage, setCurrentPage] = useUrlNumber("page", 1);
+  const [itemsPerPage, setItemsPerPage] = useUrlNumber("limit", 10);
 
   // Redux state
   const { filteredList, pagination } = useAppSelector(
     (state) => state.transactions
-  )
+  );
 
   // Sync URL state with Redux filters
   useEffect(() => {
     dispatch(
       setFilters({
         search: searchQuery,
-        status: statusFilter as TransactionStatus | 'all',
+        status: statusFilter as TransactionStatus | "all",
       })
-    )
-  }, [searchQuery, statusFilter, dispatch])
+    );
+  }, [searchQuery, statusFilter, dispatch]);
 
   // Sync URL pagination with Redux
   useEffect(() => {
-    dispatch(setPage(currentPage))
-  }, [currentPage, dispatch])
+    dispatch(setPage(currentPage));
+  }, [currentPage, dispatch]);
 
   useEffect(() => {
-    dispatch(setLimit(itemsPerPage))
-  }, [itemsPerPage, dispatch])
+    dispatch(setLimit(itemsPerPage));
+  }, [itemsPerPage, dispatch]);
 
   // Pagination
-  const totalPages = pagination.totalPages
+  const totalPages = pagination.totalPages;
   const paginatedData = useMemo(() => {
-    const startIndex = (pagination.page - 1) * pagination.limit
-    return filteredList.slice(startIndex, startIndex + pagination.limit)
-  }, [filteredList, pagination.page, pagination.limit])
+    const startIndex = (pagination.page - 1) * pagination.limit;
+    return filteredList.slice(startIndex, startIndex + pagination.limit);
+  }, [filteredList, pagination.page, pagination.limit]);
 
   // Handlers
   const handleView = (transaction: Transaction) => {
-    setSelectedTransaction(transaction)
-    setIsViewModalOpen(true)
-  }
+    setSelectedTransaction(transaction);
+    setIsViewModalOpen(true);
+  };
 
   const getPageNumbers = () => {
-    const pages: (number | string)[] = []
+    const pages: (number | string)[] = [];
     if (totalPages <= 7) {
       for (let i = 1; i <= totalPages; i++) {
-        pages.push(i)
+        pages.push(i);
       }
     } else {
-      pages.push(1)
-      if (pagination.page > 3) pages.push('...')
+      pages.push(1);
+      if (pagination.page > 3) pages.push("...");
       for (
         let i = Math.max(2, pagination.page - 1);
         i <= Math.min(totalPages - 1, pagination.page + 1);
         i++
       ) {
-        if (!pages.includes(i)) pages.push(i)
+        if (!pages.includes(i)) pages.push(i);
       }
-      if (pagination.page < totalPages - 2) pages.push('...')
-      if (!pages.includes(totalPages)) pages.push(totalPages)
+      if (pagination.page < totalPages - 2) pages.push("...");
+      if (!pages.includes(totalPages)) pages.push(totalPages);
     }
-    return pages
-  }
+    return pages;
+  };
 
   return (
     <motion.div
@@ -134,7 +133,9 @@ export default function TransactionsHistory() {
                   variant="outline"
                   className="bg-secondary hover:bg-secondary text-white border-secondary"
                 >
-                  Filter
+                  {STATUS_OPTIONS.find(
+                    (option) => option.value === statusFilter
+                  )?.label || "Filter"}
                   <ChevronDown className="h-4 w-4 ml-2" />
                 </Button>
               </DropdownMenuTrigger>
@@ -145,8 +146,8 @@ export default function TransactionsHistory() {
                     onClick={() => setStatusFilter(option.value)}
                     className={
                       statusFilter === option.value
-                        ? 'bg-secondary text-white'
-                        : ''
+                        ? "bg-secondary text-white"
+                        : ""
                     }
                   >
                     {option.label}
@@ -159,10 +160,7 @@ export default function TransactionsHistory() {
 
         <CardContent className="p-0">
           {/* Table */}
-          <TransactionTable
-            transactions={paginatedData}
-            onView={handleView}
-          />
+          <TransactionTable transactions={paginatedData} onView={handleView} />
 
           {/* Pagination */}
           <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
@@ -199,16 +197,16 @@ export default function TransactionsHistory() {
 
               <div className="flex items-center gap-1">
                 {getPageNumbers().map((page, index) =>
-                  typeof page === 'number' ? (
+                  typeof page === "number" ? (
                     <Button
                       key={index}
-                      variant={pagination.page === page ? 'default' : 'outline'}
+                      variant={pagination.page === page ? "default" : "outline"}
                       size="sm"
                       onClick={() => setCurrentPage(page)}
                       className={`w-8 h-8 ${
                         pagination.page === page
-                          ? 'bg-green-600 text-white hover:bg-green-700'
-                          : 'text-gray-600'
+                          ? "bg-green-600 text-white hover:bg-green-700"
+                          : "text-gray-600"
                       }`}
                     >
                       {page}
@@ -242,11 +240,11 @@ export default function TransactionsHistory() {
       <ViewTransactionDetailsModal
         open={isViewModalOpen}
         onClose={() => {
-          setIsViewModalOpen(false)
-          setSelectedTransaction(null)
+          setIsViewModalOpen(false);
+          setSelectedTransaction(null);
         }}
         transaction={selectedTransaction}
       />
     </motion.div>
-  )
+  );
 }
