@@ -1,19 +1,17 @@
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Eye, Edit, Trash2 } from 'lucide-react'
+import { Edit, Trash2 } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import type { FAQ } from '@/types'
 
 interface FAQTableProps {
   faqs: FAQ[]
-  onView: (faq: FAQ) => void
   onEdit: (faq: FAQ) => void
   onDelete: (faq: FAQ) => void
 }
 
 export function FAQTable({
   faqs,
-  onView,
   onEdit,
   onDelete,
 }: FAQTableProps) {
@@ -107,14 +105,14 @@ export function FAQTable({
                 {/* Actions Column */}
                 <td className="px-6 py-4">
                   <div className="flex justify-end gap-2">
-                    <Button
+                    {/* <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onView(faq)}
                       className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200"
                     >
                       <Eye className="h-4 w-4" />
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="outline"
                       size="sm"

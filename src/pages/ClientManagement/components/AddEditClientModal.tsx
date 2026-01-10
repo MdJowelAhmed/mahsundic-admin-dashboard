@@ -2,11 +2,18 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Upload, X, User, Phone, Mail, MapPin } from 'lucide-react'
+import { Upload, X, User, Phone, Mail, MapPin, Users } from 'lucide-react'
 import { ModalWrapper } from '@/components/common'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useAppDispatch } from '@/redux/hooks'
 import { addClient, updateClient } from '@/redux/slices/clientSlice'
 import { useToast } from '@/components/ui/use-toast'
@@ -19,7 +26,7 @@ const clientSchema = z.object({
   email: z.string().email('Invalid email address'),
   country: z.string().min(1, 'Country is required'),
   fullAddress: z.string().min(1, 'Full address is required'),
-  gender: z.string().optional(),
+  gender: z.enum(['Male', 'Female', 'Others']).optional(),
   licenseNumber: z.string().optional(),
 })
 
@@ -32,18 +39,28 @@ interface AddEditClientModalProps {
 }
 
 const countries = [
-  'France',
-  'Germany',
-  'Spain',
-  'Italy',
-  'USA',
-  'UK',
-  'Canada',
-  'Australia',
-  'Japan',
-  'China',
-  'India',
-  'Brazil',
+  { value: 'France', label: 'France' },
+  { value: 'Germany', label: 'Germany' },
+  { value: 'Spain', label: 'Spain' },
+  { value: 'Italy', label: 'Italy' },
+  { value: 'USA', label: 'USA' },
+  { value: 'UK', label: 'UK' },
+  { value: 'Canada', label: 'Canada' },
+  { value: 'Australia', label: 'Australia' },
+  { value: 'Japan', label: 'Japan' },
+  { value: 'China', label: 'China' },
+  { value: 'India', label: 'India' },
+  { value: 'Brazil', label: 'Brazil' },
+  { value: 'Bangladesh', label: 'Bangladesh' },
+  { value: 'Pakistan', label: 'Pakistan' },
+  { value: 'Nepal', label: 'Nepal' },
+  { value: 'Sri Lanka', label: 'Sri Lanka' },
+]
+
+const genderOptions = [
+  { value: 'Male', label: 'Male' },
+  { value: 'Female', label: 'Female' },
+  { value: 'Others', label: 'Others' },
 ]
 
 export function AddEditClientModal({ open, onClose, client }: AddEditClientModalProps) {
@@ -61,6 +78,8 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<ClientFormData>({
     resolver: zodResolver(clientSchema),
@@ -70,10 +89,13 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
       email: '',
       country: '',
       fullAddress: '',
-      gender: '',
+      gender: undefined,
       licenseNumber: '',
     },
   })
+
+  const watchedCountry = watch('country')
+  const watchedGender = watch('gender')
 
   // Reset form when modal opens or client changes
   useEffect(() => {
@@ -85,7 +107,7 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
           email: client.email,
           country: client.country,
           fullAddress: client.fullAddress || '',
-          gender: client.gender || '',
+          gender: (client.gender as 'Male' | 'Female' | 'Others') || undefined,
           licenseNumber: client.licenseNumber || '',
         })
         setPhotoPreview(client.avatar || '')
@@ -97,7 +119,7 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
           email: '',
           country: '',
           fullAddress: '',
-          gender: '',
+          gender: undefined,
           licenseNumber: '',
         })
         setPhoto(null)
@@ -251,24 +273,21 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
               <MapPin className="h-4 w-4 text-muted-foreground" />
               <Label htmlFor="country">Country</Label>
             </div>
-            <select
-              id="country"
-              {...register('country')}
-              className={cn(
-                'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background',
-                'file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-                'disabled:cursor-not-allowed disabled:opacity-50',
-                errors.country && 'border-destructive'
-              )}
+            <Select
+              value={watchedCountry || ''}
+              onValueChange={(value) => setValue('country', value, { shouldValidate: true })}
             >
-              <option value="">Select Country</option>
-              {countries.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger error={!!errors.country}>
+                <SelectValue placeholder="Select Country" />
+              </SelectTrigger>
+              <SelectContent>
+                {countries.map((country) => (
+                  <SelectItem key={country.value} value={country.value}>
+                    {country.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {errors.country && (
               <p className="text-xs text-destructive">{errors.country.message}</p>
             )}
@@ -294,14 +313,27 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
           {/* Gender */}
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <User className="h-4 w-4 text-muted-foreground" />
+              <Users className="h-4 w-4 text-muted-foreground" />
               <Label htmlFor="gender">Gender</Label>
             </div>
-            <Input
-              id="gender"
-              placeholder="Enter Gender"
-              {...register('gender')}
-            />
+            <Select
+              value={watchedGender || ''}
+              onValueChange={(value) => setValue('gender', value as 'Male' | 'Female' | 'Others', { shouldValidate: true })}
+            >
+              <SelectTrigger error={!!errors.gender}>
+                <SelectValue placeholder="Select Gender" />
+              </SelectTrigger>
+              <SelectContent>
+                {genderOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.gender && (
+              <p className="text-xs text-destructive">{errors.gender.message}</p>
+            )}
           </div>
 
           {/* License Number */}
@@ -459,7 +491,7 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
               ? 'Saving...'
               : isEditMode
               ? 'Save Changes'
-              : 'Save Category'}
+              : 'Add Client'}
           </Button>
         </div>
       </form>

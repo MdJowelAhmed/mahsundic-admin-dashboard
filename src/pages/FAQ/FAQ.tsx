@@ -6,7 +6,7 @@ import { Plus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { SearchInput } from '@/components/common/SearchInput'
 import { FAQTable } from './components/FAQTable'
 import { AddEditFAQModal } from './components/AddEditFAQModal'
-import { ViewFAQModal } from './components/ViewFAQModal'
+// import { ViewFAQModal } from './components/ViewFAQModal'
 import { DeleteFAQModal } from './components/DeleteFAQModal'
 import { FAQFilterDropdown } from './components/FAQFilterDropdown'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
@@ -28,7 +28,7 @@ const FAQ = () => {
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false)
+  // const [isViewModalOpen, setIsViewModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [selectedFAQ, setSelectedFAQ] = useState<FAQ | null>(null)
 
@@ -68,10 +68,10 @@ const FAQ = () => {
   }, [filteredList, pagination.page, pagination.limit])
 
   // Handlers
-  const handleView = (faq: FAQ) => {
-    setSelectedFAQ(faq)
-    setIsViewModalOpen(true)
-  }
+  // const handleView = (faq: FAQ) => {
+  //   setSelectedFAQ(faq)
+  //   setIsViewModalOpen(true)
+  // }
 
   const handleEdit = (faq: FAQ) => {
     setSelectedFAQ(faq)
@@ -166,7 +166,6 @@ const FAQ = () => {
           {/* Table */}
           <FAQTable
             faqs={paginatedData}
-            onView={handleView}
             onEdit={handleEdit}
             onDelete={handleDelete}
           />
@@ -252,15 +251,15 @@ const FAQ = () => {
         faq={selectedFAQ}
       />
 
-      {/* View FAQ Modal */}
-      <ViewFAQModal
+      {/* View FAQ Modal - Commented out as View button is hidden */}
+      {/* <ViewFAQModal
         open={isViewModalOpen}
         onClose={() => {
           setIsViewModalOpen(false)
           setSelectedFAQ(null)
         }}
         faq={selectedFAQ}
-      />
+      /> */}
 
       {/* Delete FAQ Modal */}
       <DeleteFAQModal
