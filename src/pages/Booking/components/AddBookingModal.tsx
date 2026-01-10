@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Calendar, User, Car, CreditCard, Clock, Mail, Phone, DollarSign, CheckCircle, AlertCircle } from 'lucide-react'
+import { Calendar, User, Car, CreditCard, Clock, Mail, Phone, DollarSign, CheckCircle } from 'lucide-react'
 import { ModalWrapper } from '@/components/common'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,8 +10,8 @@ import { Label } from '@/components/ui/label'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { addBooking } from '@/redux/slices/bookingSlice'
 import { useToast } from '@/components/ui/use-toast'
-import type { BookingStatus, BookingFormData } from '@/types'
-import { cn } from '@/utils/cn'
+// import type { BookingStatus, BookingFormData } from '@/types'
+import { cn } from '@/utils/cn' 
 
 const bookingSchema = z.object({
   clientName: z.string().min(2, 'Client name must be at least 2 characters'),
@@ -74,7 +74,7 @@ export function AddBookingModal({ open, onClose }: AddBookingModalProps) {
   })
 
   const watchedCarId = watch('carId')
-  const selectedCar = cars.find((car) => car.id === watchedCarId)
+  // const selectedCar = cars.find((car) => car.id === watchedCarId)
 
   // Reset form when modal opens
   useEffect(() => {
@@ -334,7 +334,7 @@ export function AddBookingModal({ open, onClose }: AddBookingModalProps) {
 
         {/* Plan and Payment */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
+          {/* <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-muted-foreground" />
               <Label htmlFor="plan">Plan *</Label>
@@ -358,7 +358,7 @@ export function AddBookingModal({ open, onClose }: AddBookingModalProps) {
             {errors.plan && (
               <p className="text-xs text-destructive">{errors.plan.message}</p>
             )}
-          </div>
+          </div> */}
 
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
@@ -377,10 +377,36 @@ export function AddBookingModal({ open, onClose }: AddBookingModalProps) {
               </p>
             )}
           </div>
+
+
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="paymentStatus">Payment Status *</Label>
+            </div>
+            <select
+              id="paymentStatus"
+              {...register('paymentStatus')}
+              className={cn(
+                'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                'disabled:cursor-not-allowed disabled:opacity-50',
+                errors.paymentStatus && 'border-destructive'
+              )}
+            >
+              <option value="Pending">Pending</option>
+              <option value="Paid">Paid</option>
+            </select>
+            {errors.paymentStatus && (
+              <p className="text-xs text-destructive">
+                {errors.paymentStatus.message}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Payment Status and Booking Status */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -431,7 +457,7 @@ export function AddBookingModal({ open, onClose }: AddBookingModalProps) {
               </p>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-3 pt-4 border-t">
