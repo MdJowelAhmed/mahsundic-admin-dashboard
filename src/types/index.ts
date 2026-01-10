@@ -112,9 +112,10 @@ export interface Car {
   seats: number
   suitcases?: string
   location?: string
-  fuelPolicy?: string
-  kilometers?: string
-  climate?: string
+  fuelPolicy?: 'Full to Full' | 'Full to Empty' | 'Pre-paid' | 'Same to Same' | 'Fair'
+  kilometers?: 'Unlimited Mileage' | '200km (per day limit)' | '400km (per day limit)' | '500km (per day limit)' | string
+  climate?: 'Automatic' | 'Manual'
+  fuelType?: 'Petrol' | 'Diesel' | 'Electric' | 'Hybrid'
   amount: number
   priceDuration: string
   carClass: CarClass
@@ -122,6 +123,8 @@ export interface Car {
   termsConditions?: string
   owner?: CarOwner
   rating?: number
+  isTopRated?: boolean
+  isMostPopular?: boolean
   createdAt: string
   updatedAt: string
 }
@@ -148,7 +151,13 @@ export type CarClass = 'Upper Class' | 'Small Cars' | 'Compact Class' | 'Middle 
 export interface CarFilters {
   search: string
   carClass: CarClass | 'all'
-  transmission: 'Automatic' | 'Manual' | 'all'
+  transmission: ('Automatic' | 'Manual')[] | 'all'
+  seats: (2 | 4 | 5 | 7 | 9)[] | 'all'
+  fuelType: ('Petrol' | 'Diesel' | 'Electric' | 'Hybrid')[] | 'all'
+  doors: (2 | 4 | 5)[] | 'all'
+  mileageLimit: ('Unlimited Mileage' | '200km (per day limit)' | '400km (per day limit)' | '500km (per day limit)')[] | 'all'
+  fuelPolicy: ('Full to Full' | 'Full to Empty' | 'Pre-paid' | 'Same to Same' | 'Fair')[] | 'all'
+  rating: ('Top Rated' | 'Most Popular')[] | 'all'
 }
 
 // ==================== Pagination Types ====================

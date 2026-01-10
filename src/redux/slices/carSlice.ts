@@ -23,6 +23,12 @@ const initialState: CarState = {
     search: '',
     carClass: 'all',
     transmission: 'all',
+    seats: 'all',
+    fuelType: 'all',
+    doors: 'all',
+    mileageLimit: 'all',
+    fuelPolicy: 'all',
+    rating: 'all',
   },
   pagination: {
     page: 1,
@@ -68,9 +74,67 @@ const carSlice = createSlice({
         filtered = filtered.filter((car) => car.carClass === state.filters.carClass)
       }
       
-      // Transmission filter
+      // Transmission filter (array support)
       if (state.filters.transmission !== 'all') {
-        filtered = filtered.filter((car) => car.transmission === state.filters.transmission)
+        if (Array.isArray(state.filters.transmission)) {
+          filtered = filtered.filter((car) => 
+            state.filters.transmission.includes(car.transmission)
+          )
+        } else {
+          filtered = filtered.filter((car) => car.transmission === state.filters.transmission)
+        }
+      }
+      
+      // Seats filter
+      if (state.filters.seats !== 'all' && Array.isArray(state.filters.seats)) {
+        filtered = filtered.filter((car) => 
+          state.filters.seats.includes(car.seats as any)
+        )
+      }
+      
+      // Fuel type filter
+      if (state.filters.fuelType !== 'all' && Array.isArray(state.filters.fuelType)) {
+        filtered = filtered.filter((car) => 
+          car.fuelType && state.filters.fuelType.includes(car.fuelType as any)
+        )
+      }
+      
+      // Doors filter
+      if (state.filters.doors !== 'all' && Array.isArray(state.filters.doors)) {
+        filtered = filtered.filter((car) => 
+          state.filters.doors.includes(car.doors as any)
+        )
+      }
+      
+      // Mileage limit filter
+      if (state.filters.mileageLimit !== 'all' && Array.isArray(state.filters.mileageLimit)) {
+        filtered = filtered.filter((car) => {
+          if (!car.kilometers) return false
+          return state.filters.mileageLimit.some((limit) => 
+            car.kilometers?.includes(limit) || 
+            (limit === 'Unlimited Mileage' && car.kilometers?.toLowerCase().includes('unlimited'))
+          )
+        })
+      }
+      
+      // Fuel policy filter
+      if (state.filters.fuelPolicy !== 'all' && Array.isArray(state.filters.fuelPolicy)) {
+        filtered = filtered.filter((car) => 
+          car.fuelPolicy && state.filters.fuelPolicy.includes(car.fuelPolicy as any)
+        )
+      }
+      
+      // Rating filter
+      if (state.filters.rating !== 'all' && Array.isArray(state.filters.rating)) {
+        filtered = filtered.filter((car) => {
+          if (state.filters.rating.includes('Top Rated')) {
+            return car.isTopRated === true || (car.rating && car.rating >= 4.5)
+          }
+          if (state.filters.rating.includes('Most Popular')) {
+            return car.isMostPopular === true
+          }
+          return false
+        })
       }
       
       state.filteredList = filtered
@@ -81,7 +145,17 @@ const carSlice = createSlice({
       state.pagination.page = 1
     },
     clearFilters: (state) => {
-      state.filters = { search: '', carClass: 'all', transmission: 'all' }
+      state.filters = { 
+        search: '', 
+        carClass: 'all', 
+        transmission: 'all',
+        seats: 'all',
+        fuelType: 'all',
+        doors: 'all',
+        mileageLimit: 'all',
+        fuelPolicy: 'all',
+        rating: 'all',
+      }
       state.filteredList = state.list
       state.pagination.total = state.list.length
       state.pagination.totalPages = Math.ceil(

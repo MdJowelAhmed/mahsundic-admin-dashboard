@@ -39,15 +39,18 @@ import { cn } from "@/utils/cn";
 const carSchema = z.object({
   name: z.string().min(1, "Car name is required"),
   carNumber: z.string().optional(),
-  doors: z.number().min(1, "Doors must be at least 1"),
+  doors: z.number().min(2).max(5),
   suitcases: z.string().min(1, "Suitcases is required"),
-  seats: z.number().min(1, "Seats must be at least 1"),
+  seats: z.number().refine((val) => [2, 4, 5, 7, 9].includes(val), {
+    message: "Seats must be 2, 4, 5, 7, or 9",
+  }),
   location: z.string().min(1, "Location is required"),
-  fuelPolicy: z.string().min(1, "Fuel policy is required"),
-  kilometers: z.string().min(1, "Kilometers is required"),
+  fuelPolicy: z.enum(["Full to Full", "Full to Empty", "Pre-paid", "Same to Same", "Fair"]),
+  kilometers: z.enum(["Unlimited Mileage", "200km (per day limit)", "400km (per day limit)", "500km (per day limit)"]),
   carClass: z.string().min(1, "Class is required"),
   transmission: z.enum(["Automatic", "Manual"]),
-  climate: z.string().min(1, "Climate is required"),
+  climate: z.enum(["Automatic", "Manual"]),
+  fuelType: z.enum(["Petrol", "Diesel", "Electric", "Hybrid"]).optional(),
   amount: z.number().min(0.01, "Price must be greater than 0"),
   insuranceCoverage: z.string().optional(),
   termsConditions: z.string().optional(),
@@ -69,6 +72,47 @@ const transmissionOptions = [
 const carClassOptions = carClassFilterOptions.filter(
   (opt) => opt.value !== "all"
 );
+
+const seatsOptions = [
+  { value: "2", label: "2 Seats" },
+  { value: "4", label: "4 Seats" },
+  { value: "5", label: "5 Seats" },
+  { value: "7", label: "7 Seats" },
+  { value: "9", label: "9 Seats" },
+];
+
+const doorsOptions = [
+  { value: "2", label: "2 Doors" },
+  { value: "4", label: "4 Doors" },
+  { value: "5", label: "5 Doors" },
+];
+
+const fuelPolicyOptions = [
+  { value: "Full to Full", label: "Full to Full" },
+  { value: "Full to Empty", label: "Full to Empty" },
+  { value: "Pre-paid", label: "Pre-paid" },
+  { value: "Same to Same", label: "Same to Same" },
+  { value: "Fair", label: "Fair" },
+];
+
+const kilometersOptions = [
+  { value: "Unlimited Mileage", label: "Unlimited Mileage" },
+  { value: "200km (per day limit)", label: "200km (per day limit)" },
+  { value: "400km (per day limit)", label: "400km (per day limit)" },
+  { value: "500km (per day limit)", label: "500km (per day limit)" },
+];
+
+const climateOptions = [
+  { value: "Automatic", label: "Automatic" },
+  { value: "Manual", label: "Manual" },
+];
+
+const fuelTypeOptions = [
+  { value: "Petrol", label: "Petrol" },
+  { value: "Diesel", label: "Diesel" },
+  { value: "Electric", label: "Electric" },
+  { value: "Hybrid", label: "Hybrid" },
+];
 
 export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
   const dispatch = useAppDispatch();
@@ -97,11 +141,12 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
       suitcases: "",
       seats: 5,
       location: "",
-      fuelPolicy: "",
-      kilometers: "",
+      fuelPolicy: "Full to Full",
+      kilometers: "Unlimited Mileage",
       carClass: "",
       transmission: "Automatic",
-      climate: "",
+      climate: "Automatic",
+      fuelType: "Petrol",
       amount: 0,
       insuranceCoverage: "",
       termsConditions: "",
@@ -119,11 +164,12 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
           suitcases: car.suitcases || "",
           seats: car.seats,
           location: car.location || "",
-          fuelPolicy: car.fuelPolicy || "",
-          kilometers: car.kilometers || "",
+          fuelPolicy: (car.fuelPolicy as "Full to Full" | "Full to Empty" | "Pre-paid" | "Same to Same" | "Fair") || "Full to Full",
+          kilometers: (car.kilometers as "Unlimited Mileage" | "200km (per day limit)" | "400km (per day limit)" | "500km (per day limit)") || "Unlimited Mileage",
           carClass: car.carClass,
           transmission: car.transmission,
-          climate: car.climate || "",
+          climate: (car.climate as "Automatic" | "Manual") || "Automatic",
+          fuelType: car.fuelType || "Petrol",
           amount: car.amount,
           insuranceCoverage: car.insuranceCoverage || "",
           termsConditions: car.termsConditions || "",
@@ -141,11 +187,12 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
           suitcases: "",
           seats: 5,
           location: "",
-          fuelPolicy: "",
-          kilometers: "",
+          fuelPolicy: "Full to Full",
+          kilometers: "Unlimited Mileage",
           carClass: "",
           transmission: "Automatic",
-          climate: "",
+          climate: "Automatic",
+          fuelType: "Petrol",
           amount: 0,
           insuranceCoverage: "",
           termsConditions: "",
@@ -197,6 +244,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
       fuelPolicy: data.fuelPolicy,
       kilometers: data.kilometers,
       climate: data.climate,
+      fuelType: data.fuelType,
       amount: data.amount,
       priceDuration: "Per Day",
       carClass: data.carClass as CarClass,
@@ -277,13 +325,21 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
               <DoorOpen className="h-4 w-4 text-muted-foreground" />
               <Label htmlFor="doors">Doors</Label>
             </div>
-            <Input
-              id="doors"
-              type="number"
-              placeholder="Enter Number of Doors"
-              error={!!errors.doors}
-              {...register("doors", { valueAsNumber: true })}
-            />
+            <Select
+              value={String(watch("doors"))}
+              onValueChange={(value) => setValue("doors", Number(value))}
+            >
+              <SelectTrigger error={!!errors.doors}>
+                <SelectValue placeholder="Select Number of Doors" />
+              </SelectTrigger>
+              <SelectContent>
+                {doorsOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {errors.doors && (
               <p className="text-xs text-destructive">{errors.doors.message}</p>
             )}
@@ -314,13 +370,21 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
               <Users className="h-4 w-4 text-muted-foreground" />
               <Label htmlFor="seats">Seats</Label>
             </div>
-            <Input
-              id="seats"
-              type="number"
-              placeholder="Enter Number of Seats"
-              error={!!errors.seats}
-              {...register("seats", { valueAsNumber: true })}
-            />
+            <Select
+              value={String(watch("seats"))}
+              onValueChange={(value) => setValue("seats", Number(value))}
+            >
+              <SelectTrigger error={!!errors.seats}>
+                <SelectValue placeholder="Select Number of Seats" />
+              </SelectTrigger>
+              <SelectContent>
+                {seatsOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {errors.seats && (
               <p className="text-xs text-destructive">{errors.seats.message}</p>
             )}
@@ -378,15 +442,52 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
               <Snowflake className="h-4 w-4 text-muted-foreground" />
               <Label htmlFor="climate">Climate</Label>
             </div>
-            <Input
-              id="climate"
-              placeholder="Select Climate"
-              error={!!errors.climate}
-              {...register("climate")}
-            />
+            <Select
+              value={watch("climate")}
+              onValueChange={(value) => setValue("climate", value as "Automatic" | "Manual")}
+            >
+              <SelectTrigger error={!!errors.climate}>
+                <SelectValue placeholder="Select Climate" />
+              </SelectTrigger>
+              <SelectContent>
+                {climateOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {errors.climate && (
               <p className="text-xs text-destructive">
                 {errors.climate.message}
+              </p>
+            )}
+          </div>
+
+          {/* Fuel Type */}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <Fuel className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="fuelType">Fuel Type</Label>
+            </div>
+            <Select
+              value={watch("fuelType") || "Petrol"}
+              onValueChange={(value) => setValue("fuelType", value as "Petrol" | "Diesel" | "Electric" | "Hybrid")}
+            >
+              <SelectTrigger error={!!errors.fuelType}>
+                <SelectValue placeholder="Select Fuel Type" />
+              </SelectTrigger>
+              <SelectContent>
+                {fuelTypeOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.fuelType && (
+              <p className="text-xs text-destructive">
+                {errors.fuelType.message}
               </p>
             )}
           </div>
@@ -437,12 +538,21 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
               <Fuel className="h-4 w-4 text-muted-foreground" />
               <Label htmlFor="fuelPolicy">Fuel Policy</Label>
             </div>
-            <Input
-              id="fuelPolicy"
-              placeholder="Enter Fuel Policy"
-              error={!!errors.fuelPolicy}
-              {...register("fuelPolicy")}
-            />
+            <Select
+              value={watch("fuelPolicy")}
+              onValueChange={(value) => setValue("fuelPolicy", value as "Full to Full" | "Full to Empty" | "Pre-paid" | "Same to Same" | "Fair")}
+            >
+              <SelectTrigger error={!!errors.fuelPolicy}>
+                <SelectValue placeholder="Select Fuel Policy" />
+              </SelectTrigger>
+              <SelectContent>
+                {fuelPolicyOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {errors.fuelPolicy && (
               <p className="text-xs text-destructive">
                 {errors.fuelPolicy.message}
@@ -450,18 +560,27 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
             )}
           </div>
 
-          {/* Kilometers */}
+          {/* Kilometers/Mileage Limit */}
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <Gauge className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="kilometers">Kilometers</Label>
+              <Label htmlFor="kilometers">Mileage Limit</Label>
             </div>
-            <Input
-              id="kilometers"
-              placeholder="Enter Kilometers"
-              error={!!errors.kilometers}
-              {...register("kilometers")}
-            />
+            <Select
+              value={watch("kilometers")}
+              onValueChange={(value) => setValue("kilometers", value as "Unlimited Mileage" | "200km (per day limit)" | "400km (per day limit)" | "500km (per day limit)")}
+            >
+              <SelectTrigger error={!!errors.kilometers}>
+                <SelectValue placeholder="Select Mileage Limit" />
+              </SelectTrigger>
+              <SelectContent>
+                {kilometersOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {errors.kilometers && (
               <p className="text-xs text-destructive">
                 {errors.kilometers.message}
