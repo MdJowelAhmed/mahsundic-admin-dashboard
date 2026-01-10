@@ -263,6 +263,8 @@ export interface Booking {
   carId?: string
   plan: string
   payment: string
+  carImage?: string
+  carName?: string, 
   paymentStatus: 'Paid' | 'Pending'
   status: BookingStatus
   // Extended car info

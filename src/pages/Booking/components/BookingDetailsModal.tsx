@@ -9,6 +9,7 @@ import {
   CheckCircle,
   Clock,
   RefreshCw,
+  CarIcon,
 } from "lucide-react";
 import { ModalWrapper } from "@/components/common";
 import { Button } from "@/components/ui/button";
@@ -229,142 +230,46 @@ export function BookingDetailsModal({
           </div>
 
           {/* Car Information - Right Side */}
-          {booking.carInfo && (
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-900">
-                Car Information
-              </h3>
-              <div className="space-y-4">
-                {/* Car Image and Name */}
-                <Card className="border border-gray-200">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-4">
-                      {booking.carInfo.image && (
-                        <div className="h-20 w-20 rounded-lg overflow-hidden flex-shrink-0">
-                          <img
-                            src={booking.carInfo.image}
-                            alt={booking.carInfo.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-500 mb-1">Car Model</p>
-                        <p className="font-medium text-gray-900 text-lg">
-                          {booking.carInfo.name || booking.carModel}
-                        </p>
-                        <p className="text-sm text-gray-600 mt-1">
-                          License: {booking.licensePlate}
-                        </p>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900">
+              Car Information
+            </h3>
+            <div className="space-y-4">
+              {/* Car Image and Name */}
+              <Card className="border border-gray-200">
+                <CardContent className="p-4 flex flex-col gap-4">
+                  <div className="flex items-center gap-4">
+                    {/* {booking.carImage && (
+                      <div className="h-20 w-20 rounded-lg overflow-hidden flex-shrink-0">
+                        <img
+                          src={booking.carImage || <CarIcon className="h-6 w-6 text-blue-600" />}
+                          alt={booking.carName}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
+                    )} */}
+ <Car className="h-8 w-8 text-blue-600" />
+
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-500 mb-1">Car Model</p>
+                      <p className="font-medium text-gray-900 text-lg">
+                        {booking.carName}
+                      </p>
+                      <p className="text-sm text-gray-600 ">
+                        {booking.carModel}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        License: {booking.licensePlate}
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </CardContent>
+              </Card>
 
-                {/* Transmission */}
-                {booking.carInfo.transmission && (
-                  <Card className="border border-gray-200">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Car className="h-6 w-6 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-xs text-gray-500 mb-1">
-                            Transmission
-                          </p>
-                          <p className="font-medium text-gray-900">
-                            {booking.carInfo.transmission}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Seats */}
-                {booking.carInfo.seats && (
-                  <Card className="border border-gray-200">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-                          <User className="h-6 w-6 text-green-600" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-xs text-gray-500 mb-1">Seats</p>
-                          <p className="font-medium text-gray-900">
-                            {booking.carInfo.seats}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Car Class */}
-                {booking.carInfo.carClass && (
-                  <Card className="border border-gray-200">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
-                          <Car className="h-6 w-6 text-purple-600" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-xs text-gray-500 mb-1">
-                            Car Class
-                          </p>
-                          <p className="font-medium text-gray-900">
-                            {booking.carInfo.carClass}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Location */}
-                {booking.carInfo.location && (
-                  <Card className="border border-gray-200">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
-                          <MapPin className="h-6 w-6 text-orange-600" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-xs text-gray-500 mb-1">Location</p>
-                          <p className="font-medium text-gray-900">
-                            {booking.carInfo.location}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Price */}
-                {booking.carInfo.amount && booking.carInfo.priceDuration && (
-                  <Card className="border border-gray-200">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                          <CreditCard className="h-6 w-6 text-indigo-600" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-xs text-gray-500 mb-1">
-                            Rental Price
-                          </p>
-                          <p className="font-medium text-gray-900">
-                            €{booking.carInfo.amount} /{" "}
-                            {booking.carInfo.priceDuration}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
+        
             </div>
-          )}
+          </div>
         </div>
 
         <Separator />
