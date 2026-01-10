@@ -256,12 +256,35 @@ export interface Booking {
   startDate: string
   endDate: string
   clientName: string
+  clientEmail?: string
+  clientPhone?: string
   carModel: string
   licensePlate: string
+  carId?: string
   plan: string
   payment: string
   paymentStatus: 'Paid' | 'Pending'
   status: BookingStatus
+  // Extended car info
+  carInfo?: {
+    id: string
+    name: string
+    image?: string
+    transmission?: 'Automatic' | 'Manual'
+    seats?: number
+    carClass?: string
+    location?: string
+    amount?: number
+    priceDuration?: string
+  }
+  // Car owner info
+  carOwner?: {
+    name: string
+    email: string
+    phone: string
+  }
+  createdAt?: string
+  updatedAt?: string
 }
 
 export type BookingStatus = 'Upcoming' | 'Runing' | 'Completed'
@@ -269,6 +292,19 @@ export type BookingStatus = 'Upcoming' | 'Runing' | 'Completed'
 export interface BookingFilters {
   search: string
   status: BookingStatus | 'all'
+}
+
+export interface BookingFormData {
+  clientName: string
+  clientEmail?: string
+  clientPhone?: string
+  carId: string
+  startDate: string
+  endDate: string
+  plan: string
+  payment: string
+  paymentStatus: 'Paid' | 'Pending'
+  status: BookingStatus
 }
 
 // ==================== Calendar Types ====================

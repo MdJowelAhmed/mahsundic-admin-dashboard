@@ -133,6 +133,14 @@ const bookingSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload
     },
+    addBooking: (state, action: PayloadAction<Booking>) => {
+      state.list.unshift(action.payload)
+      state.filteredList.unshift(action.payload)
+      state.pagination.total = state.list.length
+      state.pagination.totalPages = Math.ceil(
+        state.list.length / state.pagination.limit
+      )
+    },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload
     },
@@ -146,6 +154,7 @@ export const {
   setPage,
   setLimit,
   updateBookingStatus,
+  addBooking,
   setLoading,
   setError,
 } = bookingSlice.actions

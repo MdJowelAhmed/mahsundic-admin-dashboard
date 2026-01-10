@@ -10,6 +10,7 @@ import {
   CheckCircle,
   ChevronLeft,
   ChevronRight,
+  Eye,
 } from "lucide-react";
 import { statusFilterOptions } from "./bookingData";
 import {
@@ -35,9 +36,14 @@ import {
 } from "@/redux/slices/bookingSlice";
 import { SearchInput } from "@/components/common/SearchInput";
 import { useToast } from "@/components/ui/use-toast";
-import type { BookingStatus } from "@/types";
+import type { BookingStatus, Booking } from "@/types";
 
-export function BookingTable() {
+interface BookingTableProps {
+  onAddBooking: () => void;
+  onViewDetails: (booking: Booking) => void;
+}
+
+export function BookingTable({ onAddBooking, onViewDetails }: BookingTableProps) {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
 
@@ -228,7 +234,10 @@ export function BookingTable() {
             </div>
 
             {/* Add Bookings Button */}
-            <Button className="bg-primary-foreground hover:bg-primary/90 text-white">
+            <Button
+              onClick={onAddBooking}
+              className="bg-primary-foreground hover:bg-primary/90 text-white"
+            >
               <Plus className="h-4 w-4 mr-2" />
               Add Bookings
             </Button>
@@ -258,8 +267,11 @@ export function BookingTable() {
                   <th className="px-6 py-4 text-center text-sm font-bold">
                     payment
                   </th>
-                  <th className="px-6 py-4 text-right text-sm font-bold">
+                  <th className="px-6 py-4 text-center text-sm font-bold">
                     status
+                  </th>
+                  <th className="px-6 py-4 text-right text-sm font-bold">
+                    Action
                   </th>
                 </tr>
               </thead>
@@ -267,7 +279,7 @@ export function BookingTable() {
                 {paginatedData.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={7}
+                      colSpan={8}
                       className="px-6 py-8 text-center text-gray-500"
                     >
                       No bookings found
@@ -329,8 +341,19 @@ export function BookingTable() {
                           {getPaymentStatusBadge(booking.paymentStatus)}
                         </div>
                       </td>
-                      <td className="px-6 py-2 text-right rounded-sm">
+                      <td className="px-6 py-2 text-center rounded-sm">
                         {getStatusButton(booking.status, booking.id)}
+                      </td>
+                      <td className="px-6 py-2 text-right">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => onViewDetails(booking)}
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200"
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          View Details
+                        </Button>
                       </td>
                     </motion.tr>
                   ))
