@@ -452,7 +452,7 @@ export function AddEditClientModal({ open, onClose, client }: AddEditClientModal
                       <Upload className="h-6 w-6 text-blue-600" />
                     </div>
                     <p className="text-sm font-medium text-gray-700 text-center">
-                      Upload license image or PDF for verification
+                       Image or PDF for verification
                     </p>
                   </div>
                   <Button
