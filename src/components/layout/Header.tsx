@@ -74,9 +74,9 @@ export function Header() {
         </div> */}
 
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-5">
           {/* Theme toggle */}
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             onClick={() => dispatch(toggleTheme())}
@@ -86,13 +86,13 @@ export function Header() {
             ) : (
               <Sun className="h-5 w-5 text-accent" />
             )}
-          </Button>
+          </Button> */}
 
           {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5 text-accent" />
+                <Bell className="h-8 w-8 text-accent" />
                 <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-destructive" />
               </Button>
             </DropdownMenuTrigger>
@@ -100,7 +100,7 @@ export function Header() {
               <DropdownMenuLabel>Notifications</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="p-4 text-center text-sm text-muted-foreground">
-                <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <Bell className="h-10 w-10 mx-auto mb-2 opacity-50" />
                 <p>No new notifications</p>
               </div>
             </DropdownMenuContent>
@@ -110,9 +110,9 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                <Avatar className="h-9 w-9">
+                <Avatar className="h-12 w-12">
                   <AvatarImage src={user?.avatar} />
-                  <AvatarFallback>
+                  <AvatarFallback className="text-white bg-primary" >
                     {user ? getInitials(user.firstName, user.lastName) : 'AD'}
                   </AvatarFallback>
                 </Avatar>

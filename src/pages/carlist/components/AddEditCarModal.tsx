@@ -685,7 +685,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="bg-primary-foreground hover:bg-primary-foreground/80 text-white"
+            className="bg-primary hover:bg-primary/80 text-white"
           >
             {isSubmitting
               ? "Saving..."
