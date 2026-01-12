@@ -3,19 +3,14 @@ import {
   Mail,
   Phone,
   MapPin,
-  Calendar,
-  CheckCircle,
-  XCircle,
-  Clock,
+  
 } from "lucide-react";
 import { ModalWrapper } from "@/components/common";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { Client } from "@/types";
-import { cn } from "@/utils/cn";
-import { formatDate } from "@/utils/formatters";
 
 interface ViewClientDetailsModalProps {
   open: boolean;

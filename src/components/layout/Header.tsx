@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Menu, Bell, Sun, Moon, LogOut, User, Settings } from 'lucide-react'
+import { Menu, Bell, LogOut, User, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { toggleSidebar, toggleTheme } from '@/redux/slices/uiSlice'
+import { toggleSidebar } from '@/redux/slices/uiSlice'
 import { logout } from '@/redux/slices/authSlice'
 import { getInitials } from '@/utils/formatters'
 
@@ -29,7 +29,7 @@ const routeTitles: Record<string, string> = {
 export function Header() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { theme } = useAppSelector((state) => state.ui)
+  // const { theme } = useAppSelector((state) => state.ui)
   const { user } = useAppSelector((state) => state.auth)
   const location = useLocation()
 

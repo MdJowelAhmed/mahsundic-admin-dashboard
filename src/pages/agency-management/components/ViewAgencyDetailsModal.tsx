@@ -1,7 +1,7 @@
-import { Building2, User, Mail, Phone, MapPin, Globe, Calendar, FileText, Car, Package } from 'lucide-react'
+import { Building2, User, Mail, Phone, MapPin, Globe, FileText, Car, Package } from 'lucide-react'
 import { ModalWrapper, StatusBadge } from '@/components/common'
 import { Separator } from '@/components/ui/separator'
-import { formatDate } from '@/utils/formatters'
+// import { formatDate } from '@/utils/formatters'
 import type { Agency } from '@/types'
 
 interface ViewAgencyDetailsModalProps {
