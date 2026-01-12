@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { SearchInput } from '@/components/common/SearchInput'
+import { Pagination } from '@/components/common/Pagination'
 import { CarFilterDropdown } from './components/CarFilterDropdown'
 import { CarTable } from './components/CarTable'
 import { AddEditCarModal } from './components/AddEditCarModal'
@@ -17,13 +18,6 @@ import {
   deleteCar,
 } from '@/redux/slices/carSlice'
 import { useUrlString, useUrlNumber } from '@/hooks/useUrlState'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { toast } from '@/utils/toast'
 import type { Car, CarClass } from '@/types'
 
@@ -131,26 +125,12 @@ export default function CarList() {
     setSelectedCar(null)
   }
 
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = []
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i)
-      }
-    } else {
-      pages.push(1)
-      if (pagination.page > 3) pages.push('...')
-      for (
-        let i = Math.max(2, pagination.page - 1);
-        i <= Math.min(totalPages - 1, pagination.page + 1);
-        i++
-      ) {
-        if (!pages.includes(i)) pages.push(i)
-      }
-      if (pagination.page < totalPages - 2) pages.push('...')
-      if (!pages.includes(totalPages)) pages.push(totalPages)
-    }
-    return pages
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleItemsPerPageChange = (limit: number) => {
+    setItemsPerPage(limit)
   }
 
   return (
@@ -201,75 +181,15 @@ export default function CarList() {
           />
 
           {/* Pagination */}
-          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <span>Result Per Page</span>
-              <Select
-                value={String(itemsPerPage)}
-                onValueChange={(val) => setItemsPerPage(Number(val))}
-              >
-                <SelectTrigger className="w-[70px] h-8">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {[10, 20, 50].map((option) => (
-                    <SelectItem key={option} value={String(option)}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(Math.max(1, pagination.page - 1))}
-                disabled={pagination.page === 1}
-                className="text-gray-600"
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                Prev
-              </Button>
-
-              <div className="flex items-center gap-1">
-                {getPageNumbers().map((page, index) =>
-                  typeof page === 'number' ? (
-                    <Button
-                      key={index}
-                      variant={pagination.page === page ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 ${
-                        pagination.page === page
-                          ? 'bg-green-600 text-white hover:bg-green-700'
-                          : 'text-gray-600'
-                      }`}
-                    >
-                      {page}
-                    </Button>
-                  ) : (
-                    <span key={index} className="px-2 text-gray-400">
-                      {page}
-                    </span>
-                  )
-                )}
-              </div>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  setCurrentPage(Math.min(totalPages, pagination.page + 1))
-                }
-                disabled={pagination.page === totalPages}
-                className="text-gray-600"
-              >
-                Next
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
+          <div className="px-6 py-4 border-t border-gray-100">
+            <Pagination
+              currentPage={pagination.page}
+              totalPages={totalPages}
+              totalItems={filteredList.length}
+              itemsPerPage={pagination.limit}
+              onPageChange={handlePageChange}
+              onItemsPerPageChange={handleItemsPerPageChange}
+            />
           </div>
         </CardContent>
       </Card>
