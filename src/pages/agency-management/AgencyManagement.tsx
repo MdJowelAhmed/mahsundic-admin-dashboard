@@ -18,12 +18,18 @@ import { toast } from '@/utils/toast'
 import type { Agency, AgencyStatus } from '@/types'
 import { AgencyTable } from './components/AgencyTable'
 import { AddEditAgencyModal } from './components/AddEditAgencyModal'
+import { ViewAgencyDetailsModal } from './components/ViewAgencyDetailsModal'
+import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 
 export default function AgencyManagement() {
   const dispatch = useAppDispatch()
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null)
+  const [agencyToDelete, setAgencyToDelete] = useState<Agency | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const [searchQuery, setSearchQuery] = useUrlString('search', '')
   const [statusFilter, setStatusFilter] = useUrlString('status', 'all')
@@ -57,30 +63,63 @@ export default function AgencyManagement() {
 
   const handleView = (agency: Agency) => {
     setSelectedAgency(agency)
-    setIsModalOpen(true)
+    setIsViewModalOpen(true)
   }
 
   const handleDelete = (agency: Agency) => {
-    dispatch(deleteAgency(agency.id))
-    toast({
-      title: 'Agency Deleted',
-      description: `${agency.name} has been removed.`,
-    })
+    setAgencyToDelete(agency)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!agencyToDelete) return
+
+    try {
+      setIsDeleting(true)
+      await new Promise((resolve) => setTimeout(resolve, 500)) // Simulate API call
+      dispatch(deleteAgency(agencyToDelete.id))
+      toast({
+        title: 'Agency Deleted',
+        description: `${agencyToDelete.name} has been removed.`,
+      })
+      setIsDeleteDialogOpen(false)
+      setAgencyToDelete(null)
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete agency. Please try again.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsDeleting(false)
+    }
   }
 
   const handleAddNew = () => {
     setSelectedAgency(null)
-    setIsModalOpen(true)
+    setIsEditModalOpen(true)
   }
 
   const handleEdit = (agency: Agency) => {
     setSelectedAgency(agency)
-    setIsModalOpen(true)
+    setIsEditModalOpen(true)
   }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false)
     setSelectedAgency(null)
+  }
+
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false)
+    setSelectedAgency(null)
+  }
+
+  const handleCloseDeleteDialog = () => {
+    if (!isDeleting) {
+      setIsDeleteDialogOpen(false)
+      setAgencyToDelete(null)
+    }
   }
 
   const getPageNumbers = () => {
@@ -232,10 +271,31 @@ export default function AgencyManagement() {
         </CardContent>
       </Card>
 
+      {/* Edit/Add Modal */}
       <AddEditAgencyModal
-        open={isModalOpen}
-        onClose={handleCloseModal}
+        open={isEditModalOpen}
+        onClose={handleCloseEditModal}
         agency={selectedAgency}
+      />
+
+      {/* View Details Modal */}
+      <ViewAgencyDetailsModal
+        open={isViewModalOpen}
+        onClose={handleCloseViewModal}
+        agency={selectedAgency}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        open={isDeleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleConfirmDelete}
+        title="Delete Agency"
+        description={`Are you sure you want to delete "${agencyToDelete?.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        isLoading={isDeleting}
       />
     </motion.div>
   )
