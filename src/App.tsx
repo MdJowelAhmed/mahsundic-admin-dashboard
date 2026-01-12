@@ -28,6 +28,7 @@ import AgencyManagement from './pages/agency-management/AgencyManagement'
 import Calender from './pages/calender/Calender'
 import TransactionsHistory from './pages/transictions-history/TransactionsHistory'
 import FAQ from './pages/FAQ/FAQ'
+import NotFound from './pages/NotFound/NotFound'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -98,8 +99,8 @@ function App() {
           </Route>
         </Route>
 
-        {/* Catch all - redirect to dashboard or login */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Catch all - 404 Not Found */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster position="top-right" richColors closeButton />
     </TooltipProvider>
