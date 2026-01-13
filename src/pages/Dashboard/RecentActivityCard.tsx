@@ -46,13 +46,13 @@ export function RecentActivityCard() {
                                             <div className="flex flex-col gap-1 text-xs">
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-accent-foreground w-8">Start</span>
-                                                    <span className="bg-secondary text-white px-3 py-1 rounded text-[11px] font-medium min-w-[80px] text-center">
+                                                    <span className="bg-secondary text-white px-3 py-1 rounded-sm text-[11px] font-medium min-w-[80px] text-center">
                                                         {booking.startDate}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-accent-foreground w-8">End</span>
-                                                    <span className="bg-muted text-white px-3 py-1 rounded text-[11px] font-medium min-w-[80px] text-center">
+                                                    <span className="bg-muted text-white px-3 py-1 rounded-sm text-[11px] font-medium min-w-[80px] text-center">
                                                         {booking.endDate}
                                                     </span>
                                                 </div>
@@ -64,7 +64,7 @@ export function RecentActivityCard() {
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col gap-1">
                                                 <span className="text-sm font-medium text-slate-700">{booking.carModel}</span>
-                                                <span className="bg-gray-100 text-accent-foreground text-xs px-2 py-0.5 rounded w-fit">
+                                                <span className="bg-gray-100 w-20 rounded-full  text-accent-foreground text-xs px-2 py-0.5 text-center">
                                                     {booking.licensePlate}
                                                 </span>
                                             </div>
@@ -74,9 +74,9 @@ export function RecentActivityCard() {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col items-center gap-1">
-                                                <span className="text-sm font-semiboldv bg-gray-100 text-accent-foreground text-slate-700">{booking.payment}</span>
+                                                <span className="text-sm font-semibold  text-accent-foreground text-slate-700">{booking.payment}</span>
                                                 <span
-                                                    className={`text-xs px-3 py-1 rounded-full font-medium ${booking.paymentStatus === 'Paid'
+                                                    className={`text-xs px-3 py-1 w-20 text-center rounded-full font-medium ${booking.paymentStatus === 'Paid'
                                                             ? 'bg-gray-100 text-accent-foreground'
                                                             : 'bg-gray-100 text-accent-foreground'
                                                         }`}
