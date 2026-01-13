@@ -101,7 +101,7 @@ export function AgencyTable({
                 <td className="px-6 py-4">
                   <span
                     className={cn(
-                      'inline-flex items-center px-4 py-1 rounded-full text-xs font-semibold',
+                      'inline-flex items-center px-3 py-1 w-20 justify-center text-center rounded-full text-xs font-semibold',
                       agency.status === 'active'
                         ? 'bg-green-500 text-white'
                         : 'bg-gray-300 text-gray-800'

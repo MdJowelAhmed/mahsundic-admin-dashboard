@@ -89,7 +89,7 @@ export function ClientTable({
                 <td className="px-6 py-4">
                   <span
                     className={cn(
-                      'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium',
+                      'inline-flex items-center px-3 py-1 w-20 text-center rounded-sm text-xs font-medium',
                       client.status === 'verified'
                         ? 'bg-green-100 text-green-800'
                         : client.status === 'requested'
