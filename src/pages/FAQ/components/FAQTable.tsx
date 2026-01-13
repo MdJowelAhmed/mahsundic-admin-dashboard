@@ -80,7 +80,7 @@ export function FAQTable({
                 <td className="px-6 py-4">
                   <span
                     className={cn(
-                      'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium',
+                      'inline-flex items-center px-3 py-1 w-28 text-center justify-center  rounded-sm text-xs font-medium',
                       getPositionBadgeColor(faq.position)
                     )}
                   >

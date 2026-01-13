@@ -15,6 +15,7 @@ import {
   Calendar,
   CreditCard,
   HelpCircle,
+  ListOrdered,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -39,7 +40,7 @@ const navItems: NavItem[] = [
   {
     title: 'Booking-management',
     href: '/booking-management',
-    icon: LayoutDashboard,
+    icon: ListOrdered,
   },
   // {
   //   title: 'Users',
