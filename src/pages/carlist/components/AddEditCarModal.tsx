@@ -3,20 +3,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
-  DoorOpen,
-  Luggage,
-  Users,
-  MapPin,
-  Fuel,
-  Gauge,
-  Settings,
-  Snowflake,
   Upload,
   X,
-  Car as CarIcon,
-  Hash,
-  Star,
-  DollarSign,
 } from "lucide-react";
 import { ModalWrapper, FormSelect, TiptapEditor } from "@/components/common";
 import { Button } from "@/components/ui/button";
@@ -38,7 +26,7 @@ import { cn } from "@/utils/cn";
 
 const carSchema = z.object({
   name: z.string().min(1, "Car name is required"),
-  carNumber: z.string().optional(),
+  carNumber: z.string().min(1, "Car number is required"),
   doors: z.number().min(2).max(5),
   suitcases: z.string().min(1, "Suitcases is required"),
   seats: z.number().refine((val) => [2, 4, 5, 7, 9].includes(val), {
@@ -121,6 +109,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
   const [insuranceContent, setInsuranceContent] = useState("");
   const [termsContent, setTermsContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageError, setImageError] = useState<string>("");
 
   const isEditMode = !!car;
 
@@ -200,6 +189,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
         setTermsContent("");
         setImages([]);
         setImagePreviews([]);
+        setImageError("");
       }
     }
   }, [open, isEditMode, car, reset]);
@@ -212,6 +202,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
       const newPreviews = files.map((file) => URL.createObjectURL(file));
       setImagePreviews([...imagePreviews, ...newPreviews]);
+      setImageError(""); // Clear error when images are added
     }
   };
 
@@ -220,9 +211,24 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
     const newPreviews = imagePreviews.filter((_, i) => i !== index);
     setImages(newImages);
     setImagePreviews(newPreviews);
+    // Clear error if images still exist after removal
+    if (newPreviews.length > 0 || (isEditMode && car?.images && car.images.length > 0)) {
+      setImageError("");
+    }
   };
 
   const onSubmit = async (data: CarFormData) => {
+    // Validate images
+    if (!isEditMode && imagePreviews.length === 0) {
+      setImageError("At least one image is required");
+      return;
+    }
+    if (isEditMode && imagePreviews.length === 0 && (!car?.images || car.images.length === 0)) {
+      setImageError("At least one image is required");
+      return;
+    }
+    setImageError("");
+
     setIsSubmitting(true);
 
     // Simulate API call
@@ -284,10 +290,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
         <div className="grid grid-cols-2 gap-3 gap-x-5">
           {/* Car Name */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <CarIcon className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="name">Car Name</Label>
-            </div>
+            <Label htmlFor="name">Car Name <span className="text-destructive">*</span></Label>
             <Input
               id="name"
               placeholder="Enter Car Name"
@@ -301,10 +304,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Car Number */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Hash className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="carNumber">Car Number</Label>
-            </div>
+            <Label htmlFor="carNumber">Car Number <span className="text-destructive">*</span></Label>
             <Input
               id="carNumber"
               placeholder="Enter Car Number"
@@ -320,10 +320,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Doors */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <DoorOpen className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="doors">Doors</Label>
-            </div>
+            <Label htmlFor="doors">Doors</Label>
             <Select
               value={String(watch("doors"))}
               onValueChange={(value) => setValue("doors", Number(value))}
@@ -346,10 +343,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Suitcases */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Luggage className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="suitcases">Suitcases</Label>
-            </div>
+            <Label htmlFor="suitcases">Suitcases</Label>
             <Input
               id="suitcases"
               placeholder="Enter Number of Suitcases"
@@ -365,10 +359,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Seats */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="seats">Seats</Label>
-            </div>
+            <Label htmlFor="seats">Seats <span className="text-destructive">*</span></Label>
             <Select
               value={String(watch("seats"))}
               onValueChange={(value) => setValue("seats", Number(value))}
@@ -391,10 +382,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Class */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Star className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="carClass">Class</Label>
-            </div>
+            <Label htmlFor="carClass">Class <span className="text-destructive">*</span></Label>
             <FormSelect
               value={watch("carClass")}
               options={carClassOptions}
@@ -407,10 +395,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Transmission */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Settings className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="transmission">Transmission</Label>
-            </div>
+            <Label htmlFor="transmission">Transmission <span className="text-destructive">*</span></Label>
             <Select
               value={watch("transmission")}
               onValueChange={(value) =>
@@ -437,10 +422,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Climate */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Snowflake className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="climate">Climate</Label>
-            </div>
+            <Label htmlFor="climate">Climate</Label>
             <Select
               value={watch("climate")}
               onValueChange={(value) => setValue("climate", value as "Automatic" | "Manual")}
@@ -465,10 +447,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Fuel Type */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Fuel className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="fuelType">Fuel Type</Label>
-            </div>
+            <Label htmlFor="fuelType">Fuel Type</Label>
             <Select
               value={watch("fuelType") || "Petrol"}
               onValueChange={(value) => setValue("fuelType", value as "Petrol" | "Diesel" | "Electric" | "Hybrid")}
@@ -493,10 +472,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Per Day Price */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="amount">Per Day Price</Label>
-            </div>
+            <Label htmlFor="amount">Per Day Price <span className="text-destructive">*</span></Label>
             <Input
               id="amount"
               type="number"
@@ -513,11 +489,8 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
           </div>
 
           {/* Location */}
-          <div className="space-y-1.5 ">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="location">Location</Label>
-            </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="location">Location</Label>
             <Input
               id="location"
               placeholder="Enter Location"
@@ -533,10 +506,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Fuel Policy */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Fuel className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="fuelPolicy">Fuel Policy</Label>
-            </div>
+            <Label htmlFor="fuelPolicy">Fuel Policy</Label>
             <Select
               value={watch("fuelPolicy")}
               onValueChange={(value) => setValue("fuelPolicy", value as "Full to Full" | "Full to Empty" | "Pre-paid" | "Same to Same" | "Fair")}
@@ -561,10 +531,7 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
           {/* Kilometers/Mileage Limit */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Gauge className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="kilometers">Mileage Limit</Label>
-            </div>
+            <Label htmlFor="kilometers">Mileage Limit <span className="text-destructive">*</span></Label>
             <Select
               value={watch("kilometers")}
               onValueChange={(value) => setValue("kilometers", value as "Unlimited Mileage" | "200km (per day limit)" | "400km (per day limit)" | "500km (per day limit)")}
@@ -618,11 +585,11 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
 
         {/* File Upload Section */}
         <div className="space-y-2">
-          <Label>Photos</Label>
+          <Label>Photos <span className="text-destructive">*</span></Label>
           <div
             className={cn(
               "border-2 border-dashed rounded-lg p-6 transition-colors",
-              "border-green-300 bg-green-50/30 hover:border-green-400"
+              imageError ? "border-destructive" : "border-green-300 bg-green-50/30 hover:border-green-400"
             )}
           >
             <div className="flex flex-col items-center justify-center gap-3">
@@ -675,6 +642,9 @@ export function AddEditCarModal({ open, onClose, car }: AddEditCarModalProps) {
               </div>
             )}
           </div>
+          {imageError && (
+            <p className="text-xs text-destructive">{imageError}</p>
+          )}
         </div>
 
         {/* Action Buttons */}

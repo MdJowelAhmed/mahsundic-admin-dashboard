@@ -68,7 +68,7 @@ export function CarTable({ cars, onEdit, onView, onDelete }: CarTableProps) {
                 {/* Doors Column */}
                 <td className="px-6 py-2">
                   <div className="flex items-center gap-2">
-                    <DoorOpen className="h-5 w-5 text-gray-600" />
+                    {/* <DoorOpen className="h-5 w-5 text-gray-600" /> */}
                     <span className="text-sm text-slate-700">
                       {car.doors} Doors
                     </span>
@@ -78,7 +78,7 @@ export function CarTable({ cars, onEdit, onView, onDelete }: CarTableProps) {
                 {/* Transmission Column */}
                 <td className="px-6 py-2">
                   <div className="flex items-center gap-2">
-                    <Gauge className="h-5 w-5 text-gray-600" />
+                    {/* <Gauge className="h-5 w-5 text-gray-600" /> */}
                     <span className="text-sm text-slate-700">
                       {car.transmission}
                     </span>
@@ -88,7 +88,7 @@ export function CarTable({ cars, onEdit, onView, onDelete }: CarTableProps) {
                 {/* Car Seats Column */}
                 <td className="px-6 py-2">
                   <div className="flex items-center gap-2">
-                    <Users className="h-5 w-5 text-gray-600" />
+                    {/* <Users className="h-5 w-5 text-gray-600" /> */}
                     <span className="text-sm text-slate-700">
                       {car.seats} Seats
                     </span>
@@ -98,7 +98,7 @@ export function CarTable({ cars, onEdit, onView, onDelete }: CarTableProps) {
                 {/* Amount Column */}
                 <td className="px-6 py-2">
                   <div className="flex flex-col">
-                    <span className="text-lg font-bold text-slate-800">
+                    <span className="text-lg font-semibold text-slate-800">
                       €{car.amount.toFixed(2)}
                     </span>
                     <span className="text-xs text-gray-500 mt-1">
