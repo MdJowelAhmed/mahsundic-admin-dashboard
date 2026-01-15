@@ -125,6 +125,8 @@ export interface Car {
   rating?: number
   isTopRated?: boolean
   isMostPopular?: boolean
+  businessId?: string // For role-based filtering
+  businessName?: string // For display purposes
   createdAt: string
   updatedAt: string
 }
@@ -276,6 +278,8 @@ export interface Booking {
   carName?: string, 
   paymentStatus: 'Paid' | 'Pending'
   status: BookingStatus
+  businessId?: string // For role-based filtering
+  businessName?: string // For display purposes
   // Extended car info
   carInfo?: {
     id: string
@@ -439,6 +443,8 @@ export interface Transaction {
   status: TransactionStatus
   paymentMethod?: string
   description?: string
+  businessId?: string // For role-based filtering
+  businessName?: string // For display purposes
   createdAt: string
   updatedAt: string
 }

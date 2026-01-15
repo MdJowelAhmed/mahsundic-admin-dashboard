@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
+import { Plus, Info } from 'lucide-react'
 import { SearchInput } from '@/components/common/SearchInput'
 import { Pagination } from '@/components/common/Pagination'
 import { CarFilterDropdown } from './components/CarFilterDropdown'
@@ -11,13 +11,21 @@ import { AddEditCarModal } from './components/AddEditCarModal'
 import { ViewCarDetailsModal } from './components/ViewCarDetailsModal'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { UserRoleIndicator } from '@/components/layout/UserRoleIndicator'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
   setFilters,
   setPage,
   setLimit,
   deleteCar,
 } from '@/redux/slices/carSlice'
+import {
+  selectPaginatedRoleBasedCars,
+  selectRoleBasedCarsCount,
+  selectRoleBasedTotalPages,
+} from '@/redux/selectors/roleBasedSelectors'
 import { useUrlString, useUrlNumber } from '@/hooks/useUrlState'
+import { useIsBusiness } from '@/hooks/useRoleBasedData'
 import { toast } from '@/utils/toast'
 import type { Car, CarClass } from '@/types'
 
@@ -40,10 +48,13 @@ export default function CarList() {
   const [currentPage, setCurrentPage] = useUrlNumber('page', 1)
   const [itemsPerPage, setItemsPerPage] = useUrlNumber('limit', 10)
 
-  // Redux state
-  const { filteredList, pagination } = useAppSelector(
-    (state) => state.cars
-  )
+  // Redux state with role-based filtering
+  const paginatedData = useAppSelector(selectPaginatedRoleBasedCars)
+  const totalFilteredCount = useAppSelector(selectRoleBasedCarsCount)
+  const totalPages = useAppSelector(selectRoleBasedTotalPages)
+  const { pagination } = useAppSelector((state) => state.cars)
+  const isBusiness = useIsBusiness()
+  const { user } = useAppSelector((state) => state.auth)
 
   // Sync URL state with Redux filters
   useEffect(() => {
@@ -64,12 +75,7 @@ export default function CarList() {
     dispatch(setLimit(itemsPerPage))
   }, [itemsPerPage, dispatch])
 
-  // Pagination
-  const totalPages = pagination.totalPages
-  const paginatedData = useMemo(() => {
-    const startIndex = (pagination.page - 1) * pagination.limit
-    return filteredList.slice(startIndex, startIndex + pagination.limit)
-  }, [filteredList, pagination.page, pagination.limit])
+  // Note: paginatedData and totalPages now come from role-based selectors
 
   // Handlers
   const handleEdit = (car: Car) => {
@@ -140,6 +146,16 @@ export default function CarList() {
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
+      {/* Role Indicator for Business Users */}
+      {isBusiness && user && (
+        <Alert className="bg-blue-50 border-blue-200">
+          <Info className="h-4 w-4 text-blue-600" />
+          <AlertDescription className="text-blue-800">
+            You are viewing cars from <strong>{user.businessName}</strong>. You can only see and manage cars that belong to your business.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <Card className="bg-white border-0 shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between pb-6">
           <CardTitle className="text-xl font-bold text-slate-800">
@@ -185,7 +201,7 @@ export default function CarList() {
             <Pagination
               currentPage={pagination.page}
               totalPages={totalPages}
-              totalItems={filteredList.length}
+              totalItems={totalFilteredCount}
               itemsPerPage={pagination.limit}
               onPageChange={handlePageChange}
               onItemsPerPageChange={handleItemsPerPageChange}

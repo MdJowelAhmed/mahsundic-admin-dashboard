@@ -5,6 +5,8 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import AuthLayout from '@/components/layout/AuthLayout'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
+import { RoleBasedRoute } from '@/components/auth/RoleBasedRoute'
+import { UserRole } from '@/types/roles'
 import { useAppDispatch } from '@/redux/hooks'
 import { loadUserFromStorage } from '@/redux/slices/authSlice'
 
@@ -60,31 +62,90 @@ function App() {
           }
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
-          <Route path="dashboard" element={<Dashboard />} />
           
-          {/* User Management */}
-          <Route path="users" element={<UserList />} />
-          <Route path="booking-management" element={<BookingManagement />} />
-          <Route path="users/:id" element={<UserDetails />} />
+          {/* Admin Only Routes */}
+          <Route 
+            path="dashboard" 
+            element={
+              <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+                <Dashboard />
+              </RoleBasedRoute>
+            } 
+          />
           
-          {/* Car Management */}
-          <Route path="cars" element={<CarList />} />
+          {/* User Management - Admin Only */}
+          <Route 
+            path="users" 
+            element={
+              <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+                <UserList />
+              </RoleBasedRoute>
+            } 
+          />
+          <Route 
+            path="users/:id" 
+            element={
+              <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+                <UserDetails />
+              </RoleBasedRoute>
+            } 
+          />
+          
+          {/* Agency Management - Admin Only */}
+          <Route 
+            path="agency-management" 
+            element={
+              <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+                <AgencyManagement />
+              </RoleBasedRoute>
+            } 
+          />
+          
+          {/* Shared Routes - Both can access but with filtered data */}
+          <Route 
+            path="booking-management" 
+            element={
+              <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.BUSINESS]}>
+                <BookingManagement />
+              </RoleBasedRoute>
+            } 
+          />
+          
+          {/* Car Management - Both can access */}
+          <Route 
+            path="cars" 
+            element={
+              <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.BUSINESS]}>
+                <CarList />
+              </RoleBasedRoute>
+            } 
+          />
+          
+          {/* Calendar - Both can access */}
+          <Route 
+            path="calender" 
+            element={
+              <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.BUSINESS]}>
+                <Calender />
+              </RoleBasedRoute>
+            } 
+          />
+          
+          {/* Transactions History - Both can access */}
+          <Route 
+            path="transactions-history" 
+            element={
+              <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.BUSINESS]}>
+                <TransactionsHistory />
+              </RoleBasedRoute>
+            } 
+          />
           
           {/* Client Management */}
           <Route path="clients" element={<ClientManagement />} />
           
-          {/* Agency Management */}
-          <Route path="agency-management" element={<AgencyManagement />} />
-
-          {/* Calender */}
-          <Route path="calender" element={<Calender />} />
-
-
-          
           {/* Product Management */}
           <Route path="products" element={<ProductList />} />
-
-          <Route path="transactions-history" element={<TransactionsHistory />} />
           
           {/* Category Management */}
           <Route path="categories" element={<CategoryList />} />
@@ -95,7 +156,14 @@ function App() {
             <Route path="password" element={<ChangePassword />} />
             <Route path="terms" element={<TermsSettings />} />
             <Route path="privacy" element={<PrivacySettings />} />
-            <Route path="faq" element={<FAQ />} />
+            <Route 
+              path="faq" 
+              element={
+                <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+                  <FAQ />
+                </RoleBasedRoute>
+              } 
+            />
           </Route>
         </Route>
 

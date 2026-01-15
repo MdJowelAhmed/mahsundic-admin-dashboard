@@ -23,12 +23,14 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { toggleSidebar } from '@/redux/slices/uiSlice'
 import { cn } from '@/utils/cn'
+import { UserRole } from '@/types/roles'
 
 interface NavItem {
   title: string
   href: string
   icon: React.ElementType
   children?: NavItem[]
+  allowedRoles?: UserRole[] // If not specified, accessible to all
 }
 
 const navItems: NavItem[] = [
@@ -36,51 +38,49 @@ const navItems: NavItem[] = [
     title: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
+    allowedRoles: [UserRole.ADMIN], // Admin only
   },
   {
-    title: 'Booking-management',
+    title: 'Booking Management',
     href: '/booking-management',
     icon: ListOrdered,
+    allowedRoles: [UserRole.ADMIN, UserRole.BUSINESS], // Both can access
   },
-  // {
-  //   title: 'Users',
-  //   href: '/users',
-  //   icon: Users,
-  // },
-  // {
-  //   title: 'Products',
-  //   href: '/products',
-  //   icon: Package,
-  // },
-  // {
-  //   title: 'Categories',
-  //   href: '/categories',
-  //   icon: FolderTree,
-  // },
+  {
+    title: 'Users',
+    href: '/users',
+    icon: Users,
+    allowedRoles: [UserRole.ADMIN], // Admin only
+  },
   {
     title: 'Car List',
     href: '/cars',
     icon: Car,
+    allowedRoles: [UserRole.ADMIN, UserRole.BUSINESS], // Both can access
   },
   {
     title: 'Agency Management',
     href: '/agency-management',
     icon: Building,
+    allowedRoles: [UserRole.ADMIN], // Admin only
   },
   {
-    title: 'Calender',
+    title: 'Calendar',
     href: '/calender',
     icon: Calendar,
+    allowedRoles: [UserRole.ADMIN, UserRole.BUSINESS], // Both can access
   },
   {
     title: 'Transactions History',
     href: '/transactions-history',
     icon: CreditCard,
+    allowedRoles: [UserRole.ADMIN, UserRole.BUSINESS], // Both can access
   },
   {
     title: 'Client Management',
     href: '/clients',
     icon: Users,
+    // No role restriction - accessible to all
   },
 ]
 
@@ -89,35 +89,56 @@ const settingsItems: NavItem[] = [
     title: 'Profile',
     href: '/settings/profile',
     icon: User,
+    // Accessible to all
   },
   {
     title: 'Password',
     href: '/settings/password',
     icon: Lock,
+    // Accessible to all
   },
   {
     title: 'Terms',
     href: '/settings/terms',
     icon: FileText,
+    allowedRoles: [UserRole.ADMIN], // Admin only
+    // Accessible to all
   },
   {
     title: 'Privacy',
     href: '/settings/privacy',
     icon: Shield,
+    allowedRoles: [UserRole.ADMIN], // Admin only
+    // Accessible to all
   },
   {
     title: 'FAQ',
     href: '/settings/faq',
     icon: HelpCircle,
+    allowedRoles: [UserRole.ADMIN], // Admin only
   },
 ]
 
 export function Sidebar() {
   const dispatch = useAppDispatch()
   const { sidebarCollapsed } = useAppSelector((state) => state.ui)
+  const { user } = useAppSelector((state) => state.auth)
   const location = useLocation()
 
   const isSettingsActive = location.pathname.startsWith('/settings')
+
+  // Filter navigation items based on user role
+  const filteredNavItems = navItems.filter((item) => {
+    if (!item.allowedRoles) return true // No restriction
+    if (!user) return false
+    return item.allowedRoles.includes(user.role as UserRole)
+  })
+
+  const filteredSettingsItems = settingsItems.filter((item) => {
+    if (!item.allowedRoles) return true // No restriction
+    if (!user) return false
+    return item.allowedRoles.includes(user.role as UserRole)
+  })
 
   return (
     <>
@@ -175,7 +196,7 @@ export function Sidebar() {
                 Main Menu
               </p>
             )}
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <SidebarNavItem
                 key={item.href}
                 item={item}
@@ -219,7 +240,7 @@ export function Sidebar() {
                 <TooltipContent side="right">Settings</TooltipContent>
               </Tooltip>
             ) : (
-              settingsItems.map((item) => (
+              filteredSettingsItems.map((item) => (
                 <SidebarNavItem
                   key={item.href}
                   item={item}

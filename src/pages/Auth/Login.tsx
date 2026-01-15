@@ -55,6 +55,8 @@ export default function Login() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Mock successful login - In production, replace with actual API call
+      
+      // Admin login
       if (data.email === "admin@example.com" && data.password === "password") {
         dispatch(
           loginSuccess({
@@ -66,11 +68,49 @@ export default function Login() {
               avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin",
               role: "admin",
             },
-            token: "mock-jwt-token-" + Date.now(),
+            token: "mock-jwt-token-admin-" + Date.now(),
           })
         );
-        navigate(from, { replace: true });
-      } else {
+        navigate(from === '/auth/login' ? '/dashboard' : from, { replace: true });
+      } 
+      // Business user login examples
+      else if (data.email === "business1@example.com" && data.password === "password") {
+        dispatch(
+          loginSuccess({
+            user: {
+              id: "b1",
+              email: data.email,
+              firstName: "Business",
+              lastName: "User One",
+              avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Business1",
+              role: "business",
+              businessId: "business-001",
+              businessName: "Premium Car Rentals",
+            },
+            token: "mock-jwt-token-business1-" + Date.now(),
+          })
+        );
+        navigate(from === '/auth/login' ? '/cars' : from, { replace: true });
+      }
+      else if (data.email === "business2@example.com" && data.password === "password") {
+        dispatch(
+          loginSuccess({
+            user: {
+              id: "b2",
+              email: data.email,
+              firstName: "Business",
+              lastName: "User Two",
+              avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Business2",
+              role: "business",
+              businessId: "business-002",
+              businessName: "Luxury Auto Rentals",
+            },
+            token: "mock-jwt-token-business2-" + Date.now(),
+          })
+        );
+        navigate(from === '/auth/login' ? '/cars' : from, { replace: true });
+      }
+      else {
         dispatch(loginFailure("Invalid email or password"));
       }
     } catch {
@@ -203,13 +243,24 @@ export default function Login() {
         </span>
       </div>
 
-      <div className="p-4 rounded-lg bg-muted/50 border text-sm space-y-1">
-        <p>
-          <strong>Email:</strong> admin@example.com
-        </p>
-        <p>
-          <strong>Password:</strong> password
-        </p>
+      <div className="p-4 rounded-lg bg-muted/50 border text-sm space-y-3">
+        <div className="space-y-1">
+          <p className="font-semibold text-foreground">Admin Account:</p>
+          <p><strong>Email:</strong> admin@example.com</p>
+          <p><strong>Password:</strong> password</p>
+        </div>
+        <Separator />
+        <div className="space-y-1">
+          <p className="font-semibold text-foreground">Business Account 1:</p>
+          <p><strong>Email:</strong> business1@example.com</p>
+          <p><strong>Password:</strong> password</p>
+        </div>
+        <Separator />
+        <div className="space-y-1">
+          <p className="font-semibold text-foreground">Business Account 2:</p>
+          <p><strong>Email:</strong> business2@example.com</p>
+          <p><strong>Password:</strong> password</p>
+        </div>
       </div>
     </div>
   );

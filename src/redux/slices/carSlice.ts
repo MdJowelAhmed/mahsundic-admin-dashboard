@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { Car, CarFilters } from '@/types'
 import { carListData } from '@/pages/carlist/carData'
+import { applyBusinessIds } from '@/utils/applyBusinessIds'
 
 interface CarState {
   list: Car[]
@@ -16,9 +17,12 @@ interface CarState {
   error: string | null
 }
 
+// Apply businessIds to car data for demo purposes
+const carsWithBusinessIds = applyBusinessIds(carListData)
+
 const initialState: CarState = {
-  list: carListData,
-  filteredList: carListData,
+  list: carsWithBusinessIds,
+  filteredList: carsWithBusinessIds,
   filters: {
     search: '',
     carClass: 'all',
@@ -33,8 +37,8 @@ const initialState: CarState = {
   pagination: {
     page: 1,
     limit: 10,
-    total: carListData.length,
-    totalPages: Math.ceil(carListData.length / 10),
+    total: carsWithBusinessIds.length,
+    totalPages: Math.ceil(carsWithBusinessIds.length / 10),
   },
   isLoading: false,
   error: null,
