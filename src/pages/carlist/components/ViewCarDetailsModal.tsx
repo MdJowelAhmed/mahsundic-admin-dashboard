@@ -229,8 +229,8 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
         <div className="grid grid-cols-2 gap-6">
           {/* Fuel Policy */}
           {car.fuelPolicy && (
-            <Card className="border border-gray-200">
-              <CardContent className="p-6">
+            <div className="border border-gray-200 rounded-lg">
+              <div className="p-4">
                 <div className="flex items-start gap-4">
                   <div className="h-12 w-12 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
                     <Fuel className="h-6 w-6 text-green-600" />
@@ -243,14 +243,14 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
                     </p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {/* Kilometers */}
           {car.kilometers && (
-            <Card className="border border-gray-200">
-              <CardContent className="p-6">
+            <div className="border border-gray-200 rounded-lg">
+              <div className="p-4">
                 <div className="flex items-start gap-4">
                   <div className="h-12 w-12 rounded-lg bg-yellow-100 flex items-center justify-center flex-shrink-0">
                     <Gauge className="h-6 w-6 text-yellow-600" />
@@ -263,8 +263,8 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
                     </p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
         </div>
 
@@ -274,8 +274,8 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
             {/* <Separator /> */}
             <div>
               <h3 className="text-lg font-semibold mb-4 text-gray-900">Car Owner Information</h3>
-              <Card className="border border-gray-200 ">
-                <CardContent className="p-6">
+              <div className="border border-gray-200 rounded-lg">
+                <div className="p-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Owner Name */}
                     <div className="flex items-center gap-2">
@@ -310,8 +310,8 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </>
         )}
@@ -322,16 +322,16 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
            
             <div>
               <h3 className="text-lg font-semibold mb-4 text-gray-900">Insurance & Coverage</h3>
-              <Card className="border border-gray-200">
-                <div className="">
+              {/* <div className="border border-gray-200 rounded-lg"> */}
+                {/* <div className="p-4"> */}
                   <TiptapEditor
                     content={car.insuranceCoverage}
                     onChange={() => {}}
                     editable={false}
                     className="h-[280px]"
                   />
-                </div>
-              </Card>
+                {/* </div> */}
+              {/* </div> */}
             </div>
           </>
         )}
@@ -342,26 +342,26 @@ export function ViewCarDetailsModal({ open, onClose, car }: ViewCarDetailsModalP
             {/* <Separator /> */}
             <div>
               <h3 className="text-lg font-semibold mb-4 text-gray-900">Terms & Conditions</h3>
-              <Card className="border border-gray-200">
-                <div className="">
+              {/* <div className="border border-gray-200 rounded-lg"> */}
+                {/* <div className="p-4"> */}
                   <TiptapEditor
                     content={car.termsConditions}
                     onChange={() => {}}
                     editable={false}
                     className="h-[280px]"
                   />
-                </div>
-              </Card>
+                {/* </div> */}
+              {/* </div> */}
             </div>
           </>
         )}
 
         {/* Close Button */}
-        <div className="flex justify-end pt-4 border-t">
+        {/* <div className="flex justify-end pt-4 border-t">
           <Button onClick={onClose} className="bg-green-600 hover:bg-green-700 text-white">
             Close
           </Button>
-        </div>
+        </div> */}
       </div>
     </ModalWrapper>
   )
