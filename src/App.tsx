@@ -23,6 +23,7 @@ import TermsSettings from '@/pages/Settings/Terms/TermsSettings'
 import PrivacySettings from '@/pages/Settings/Privacy/PrivacySettings'
 import BookingManagement from './pages/Booking/BookingManagement'
 import CarList from './pages/carlist/CarList'
+import AddCar from './pages/carlist/AddCar'
 import ClientManagement from './pages/ClientManagement/ClientManagement'
 import AgencyManagement from './pages/agency-management/AgencyManagement'
 import Calender from './pages/calender/Calender'
@@ -69,6 +70,8 @@ function App() {
           
           {/* Car Management */}
           <Route path="cars" element={<CarList />} />
+          <Route path="cars/add-car" element={<AddCar />} />
+          <Route path="cars/edit/:id" element={<AddCar />} />
           
           {/* Client Management */}
           <Route path="clients" element={<ClientManagement />} />
