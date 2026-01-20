@@ -116,7 +116,7 @@ export default function AddCar() {
   const { id } = useParams<{ id?: string }>();
   const dispatch = useAppDispatch();
   const { list } = useAppSelector((state) => state.cars);
-  
+
   const isEditMode = !!id;
   const car = isEditMode ? list.find((c) => c.id === id) : null;
 
@@ -126,7 +126,7 @@ export default function AddCar() {
   const [termsContent, setTermsContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageError, setImageError] = useState<string>("");
-  
+
   // Pricing state
   const [pricing, setPricing] = useState<PricingConfig>({
     oneDay: 0,
@@ -135,7 +135,7 @@ export default function AddCar() {
     fourteenDays: 0,
     oneMonth: 0,
   });
-  
+
   const [weekend, setWeekend] = useState<WeekendConfig>({
     selectedDays: [],
     weekendPrice: 0,
@@ -189,7 +189,7 @@ export default function AddCar() {
         fourteenDays: (car.amount || 0) * 14,
         oneMonth: (car.amount || 0) * 30,
       };
-      
+
       const carWeekend = car.weekend || {
         selectedDays: [],
         weekendPrice: car.amount || 0,
@@ -213,7 +213,7 @@ export default function AddCar() {
         pricing: carPricing,
         weekend: carWeekend,
       });
-      
+
       setPricing(carPricing);
       setWeekend(carWeekend);
       setInsuranceContent(car.insuranceCoverage || "");
@@ -305,7 +305,7 @@ export default function AddCar() {
       });
       return;
     }
-    
+
     // Validate weekend if days are selected
     if (weekend.selectedDays.length > 0 && (!weekend.weekendPrice || weekend.weekendPrice <= 0)) {
       toast({
@@ -315,11 +315,11 @@ export default function AddCar() {
       });
       return;
     }
-    
+
     // Update form values with pricing and weekend
     setValue("pricing", pricing);
     setValue("weekend", weekend);
-    
+
     // Validate images
     if (!isEditMode && imagePreviews.length === 0) {
       setImageError("At least one image is required");
@@ -633,11 +633,11 @@ export default function AddCar() {
                     setValue(
                       "fuelPolicy",
                       value as
-                        | "Full to Full"
-                        | "Full to Empty"
-                        | "Pre-paid"
-                        | "Same to Same"
-                        | "Fair"
+                      | "Full to Full"
+                      | "Full to Empty"
+                      | "Pre-paid"
+                      | "Same to Same"
+                      | "Fair"
                     )
                   }
                 >
@@ -670,10 +670,10 @@ export default function AddCar() {
                     setValue(
                       "kilometers",
                       value as
-                        | "Unlimited Mileage"
-                        | "200km (per day limit)"
-                        | "400km (per day limit)"
-                        | "500km (per day limit)"
+                      | "Unlimited Mileage"
+                      | "200km (per day limit)"
+                      | "400km (per day limit)"
+                      | "500km (per day limit)"
                     )
                   }
                 >
@@ -694,34 +694,6 @@ export default function AddCar() {
                   </p>
                 )}
               </div>
-            </div>
-
-            {/* Insurance & Coverage - TiptapEditor */}
-            <div className="space-y-2">
-              <Label>Insurance & Coverage</Label>
-              <TiptapEditor
-                content={insuranceContent}
-                onChange={(content) => {
-                  setInsuranceContent(content);
-                  setValue("insuranceCoverage", content);
-                }}
-                placeholder="Enter insurance and coverage details..."
-                className="h-[280px]"
-              />
-            </div>
-
-            {/* Terms & Conditions - TiptapEditor */}
-            <div className="space-y-2">
-              <Label>Terms & Conditions</Label>
-              <TiptapEditor
-                content={termsContent}
-                onChange={(content) => {
-                  setTermsContent(content);
-                  setValue("termsConditions", content);
-                }}
-                placeholder="Enter terms and conditions..."
-                className="h-[280px]"
-              />
             </div>
 
             {/* Pricing Configuration Section */}
@@ -755,6 +727,36 @@ export default function AddCar() {
                 }}
               />
             </div>
+
+            {/* Insurance & Coverage - TiptapEditor */}
+            <div className="space-y-2">
+              <Label>Insurance & Coverage</Label>
+              <TiptapEditor
+                content={insuranceContent}
+                onChange={(content) => {
+                  setInsuranceContent(content);
+                  setValue("insuranceCoverage", content);
+                }}
+                placeholder="Enter insurance and coverage details..."
+                className="h-[280px]"
+              />
+            </div>
+
+            {/* Terms & Conditions - TiptapEditor */}
+            <div className="space-y-2">
+              <Label>Terms & Conditions</Label>
+              <TiptapEditor
+                content={termsContent}
+                onChange={(content) => {
+                  setTermsContent(content);
+                  setValue("termsConditions", content);
+                }}
+                placeholder="Enter terms and conditions..."
+                className="h-[280px]"
+              />
+            </div>
+
+
 
             {/* File Upload Section */}
             <div className="space-y-2">
@@ -799,13 +801,13 @@ export default function AddCar() {
 
                 {/* Image Previews */}
                 {imagePreviews.length > 0 && (
-                  <div className="mt-4 grid grid-cols-4 gap-4">
+                  <div className="mt-4 grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                     {imagePreviews.map((preview, index) => (
                       <div key={index} className="relative group">
                         <img
                           src={preview}
                           alt={`Preview ${index + 1}`}
-                          className="w-full h-24 object-cover rounded-lg"
+                          className="w-full h-40 object-cover rounded-lg"
                         />
                         <button
                           type="button"
@@ -841,8 +843,8 @@ export default function AddCar() {
                 {isSubmitting
                   ? "Saving..."
                   : isEditMode
-                  ? "Save Changes"
-                  : "Add New Car"}
+                    ? "Save Changes"
+                    : "Add New Car"}
               </Button>
             </div>
           </form>

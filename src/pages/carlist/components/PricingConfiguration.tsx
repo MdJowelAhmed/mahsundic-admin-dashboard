@@ -74,15 +74,15 @@ export function PricingConfiguration({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Pricing Configuration */}
-      <Card className="bg-white border border-gray-200">
-        <CardHeader>
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div>
           <CardTitle className="text-lg font-semibold text-gray-800">
             Pricing Configuration
           </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        </div>
+        <div className="space-y-2">
           {pricingDurations.map((duration) => (
-            <div key={duration.key} className="space-y-1.5">
+            <div key={duration.key} className=" flex items-center justify-between">
               <Label htmlFor={duration.key} className="text-sm font-medium text-gray-700">
                 {duration.label}
               </Label>
@@ -93,7 +93,7 @@ export function PricingConfiguration({
                 <Input
                   id={duration.key}
                   type="number"
-                  step="0.01"
+                  // step="1"
                   min="0"
                   value={pricing[duration.key] || ''}
                   onChange={(e) =>
@@ -113,17 +113,17 @@ export function PricingConfiguration({
               )}
             </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Weekend Configuration */}
-      <Card className="bg-white border border-gray-200">
-        <CardHeader>
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div>
           <CardTitle className="text-lg font-semibold text-gray-800">
             Select your Weekend
           </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        </div>
+        <div className="space-y-2">
           {/* Day Selection */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-700">Select Days</Label>
@@ -190,8 +190,8 @@ export function PricingConfiguration({
               </p>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
