@@ -60,7 +60,7 @@ const navItems: NavItem[] = [
     title: 'Agency Management',
     href: '/agency-management',
     icon: Building,
-    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, ], // Super Admin only
   },
   {
     title: 'Calendar',
@@ -111,7 +111,7 @@ const settingsItems: NavItem[] = [
     title: 'FAQ',
     href: '/settings/faq',
     icon: HelpCircle,
-    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN], // Super Admin only
   },
 ]
 
