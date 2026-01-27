@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -11,7 +11,6 @@ import { AddEditCarModal } from './components/AddEditCarModal'
 import { ViewCarDetailsModal } from './components/ViewCarDetailsModal'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { UserRoleIndicator } from '@/components/layout/UserRoleIndicator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
   setFilters,

@@ -18,7 +18,7 @@ export const selectRoleBasedCars = (state: RootState): Car[] => {
   }
 
   // Business users see only their cars
-  if (user.role === UserRole.BUSINESS && user.businessId) {
+  if (user.role === UserRole.EMPLOYEE && user.businessId) {
     return filteredList.filter((car) => car.businessId === user.businessId)
   }
 
@@ -64,7 +64,7 @@ export const selectCanModifyItem = (state: RootState, itemBusinessId?: string): 
   if (user.role === UserRole.ADMIN) return true
 
   // Business users can only modify their own items
-  if (user.role === UserRole.BUSINESS && user.businessId) {
+  if (user.role === UserRole.EMPLOYEE && user.businessId) {
     return itemBusinessId === user.businessId
   }
 

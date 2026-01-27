@@ -5,7 +5,7 @@ import { UserRole } from '@/types/roles';
 interface DataItem {
   businessId?: string;
   userId?: string;
-  [key: string]: any;
+  [key: string]: string | number | undefined;
 }
 
 /**
@@ -24,7 +24,7 @@ export const useRoleBasedData = <T extends DataItem>(data: T[]): T[] => {
     }
 
     // Business users see only their data
-    if (user.role === UserRole.BUSINESS && user.businessId) {
+    if (user.role === UserRole.EMPLOYEE && user.businessId) {
       return data.filter(
         (item) => 
           item.businessId === user.businessId || 
@@ -49,7 +49,7 @@ export const useIsAdmin = (): boolean => {
  */
 export const useIsBusiness = (): boolean => {
   const { user } = useAppSelector((state) => state.auth);
-  return user?.role === UserRole.BUSINESS;
+  return user?.role === UserRole.EMPLOYEE;
 };
 
 /**
@@ -72,7 +72,7 @@ export const useCanModifyItem = (item: DataItem): boolean => {
   if (user.role === UserRole.ADMIN) return true;
 
   // Business users can only modify their own items
-  if (user.role === UserRole.BUSINESS) {
+  if (user.role === UserRole.EMPLOYEE) {
     return item.businessId === user.businessId || item.userId === user.id;
   }
 
