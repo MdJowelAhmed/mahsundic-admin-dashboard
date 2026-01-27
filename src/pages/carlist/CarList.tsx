@@ -1,4 +1,6 @@
+
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -7,7 +9,6 @@ import { SearchInput } from '@/components/common/SearchInput'
 import { Pagination } from '@/components/common/Pagination'
 import { CarFilterDropdown } from './components/CarFilterDropdown'
 import { CarTable } from './components/CarTable'
-import { AddEditCarModal } from './components/AddEditCarModal'
 import { ViewCarDetailsModal } from './components/ViewCarDetailsModal'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
@@ -30,9 +31,9 @@ import type { Car, CarClass } from '@/types'
 
 export default function CarList() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   // Modal state
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [isViewModalOpen, setIsViewModalOpen] = useState(false)
   const [selectedCar, setSelectedCar] = useState<Car | null>(null)
 
@@ -78,8 +79,7 @@ export default function CarList() {
 
   // Handlers
   const handleEdit = (car: Car) => {
-    setSelectedCar(car)
-    setIsModalOpen(true)
+    navigate(`/cars/edit/${car.id}`)
   }
 
   const handleView = (car: Car) => {
@@ -121,13 +121,7 @@ export default function CarList() {
   }
 
   const handleAddNew = () => {
-    setSelectedCar(null)
-    setIsModalOpen(true)
-  }
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setSelectedCar(null)
+    navigate('/cars/add-car')
   }
 
   const handlePageChange = (page: number) => {
@@ -208,13 +202,6 @@ export default function CarList() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Add/Edit Car Modal */}
-      <AddEditCarModal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        car={selectedCar}
-      />
 
       {/* View Car Details Modal */}
       <ViewCarDetailsModal
