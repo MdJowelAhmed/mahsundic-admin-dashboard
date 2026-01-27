@@ -280,28 +280,28 @@ export default function Login() {
           <p className="font-semibold text-foreground">Super Admin Account:</p>
           <p><strong>Email:</strong> superadmin@example.com</p>
           <p><strong>Password:</strong> password</p>
-          <p className="text-xs text-muted-foreground">→ Redirects to /dashboard</p>
+          {/* <p className="text-xs text-muted-foreground">→ Redirects to /dashboard</p> */}
         </div>
-        <Separator />
+        {/* <Separator />
         <div className="space-y-1">
           <p className="font-semibold text-foreground">Admin Account:</p>
           <p><strong>Email:</strong> admin@example.com</p>
           <p><strong>Password:</strong> password</p>
           <p className="text-xs text-muted-foreground">→ Redirects to /cars</p>
-        </div>
+        </div> */}
         <Separator />
         <div className="space-y-1">
           <p className="font-semibold text-foreground">Employee Account 1:</p>
           <p><strong>Email:</strong> employee1@example.com</p>
           <p><strong>Password:</strong> password</p>
-          <p className="text-xs text-muted-foreground">→ Redirects to /cars</p>
+          {/* <p className="text-xs text-muted-foreground">→ Redirects to /cars</p> */}
         </div>
         <Separator />
         <div className="space-y-1">
           <p className="font-semibold text-foreground">Employee Account 2:</p>
           <p><strong>Email:</strong> employee2@example.com</p>
           <p><strong>Password:</strong> password</p>
-          <p className="text-xs text-muted-foreground">→ Redirects to /cars</p>
+          {/* <p className="text-xs text-muted-foreground">→ Redirects to /cars</p> */}
         </div>
       </div>
     </div>
