@@ -2,9 +2,6 @@ import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '@/redux/hooks';
 import { UserRole, hasRouteAccess } from '@/types/roles';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ShieldAlert } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface RoleBasedRouteProps {
   children: ReactNode;
@@ -15,38 +12,37 @@ interface RoleBasedRouteProps {
 export const RoleBasedRoute = ({ 
   children, 
   allowedRoles,
-  redirectTo = '/dashboard'
+  // redirectTo = '/dashboard'
 }: RoleBasedRouteProps) => {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const location = useLocation();
+
+  // 🔍 Console log for debugging
+  console.log('🛡️ RoleBasedRoute Debug:');
+  console.log('Current Path:', location.pathname);
+  console.log('User:', user);
+  console.log('User Role:', user?.role);
+  console.log('Allowed Roles:', allowedRoles);
+  console.log('User Role as UserRole:', user?.role as UserRole);
 
   if (!isAuthenticated || !user) {
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
   const hasAccess = allowedRoles.includes(user.role as UserRole);
+  console.log('Has Access:', hasAccess);
 
   if (!hasAccess) {
-    return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] p-4">
-        <Alert className="max-w-lg border-destructive/50 bg-destructive/10">
-          <ShieldAlert className="h-5 w-5 text-destructive" />
-          <AlertTitle className="text-lg font-semibold">Access Denied</AlertTitle>
-          <AlertDescription className="mt-2 space-y-4">
-            <p className="text-sm">
-              You don't have permission to access this page. This area is restricted to {allowedRoles.join(', ')} users only.
-            </p>
-            <Button 
-              onClick={() => window.history.back()} 
-              variant="outline"
-              className="w-full"
-            >
-              Go Back
-            </Button>
-          </AlertDescription>
-        </Alert>
-      </div>
-    );
+    console.log('❌ Access denied, redirecting based on role')
+    // Redirect Admin and Employee to /cars
+    if (user.role === UserRole.ADMIN || user.role === UserRole.EMPLOYEE) {
+      console.log('📍 Redirecting Admin/Employee to /cars')
+      return <Navigate to="/cars" replace />;
+    }
+    
+    // Redirect Super Admin to dashboard
+    console.log('📍 Redirecting Super Admin to /dashboard')
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
@@ -68,13 +64,18 @@ export const RouteGuard = ({ children }: RouteGuardProps) => {
   const hasAccess = hasRouteAccess(user.role, location.pathname);
 
   if (!hasAccess) {
-    // Redirect business users to their default page
-    if (user.role === UserRole.BUSINESS) {
+    // Redirect Admin and Employee to /cars
+    if (user.role === UserRole.ADMIN || user.role === UserRole.EMPLOYEE) {
       return <Navigate to="/cars" replace />;
     }
+    // Redirect Super Admin to dashboard
+    if (user.role === UserRole.SUPER_ADMIN) {
+      return <Navigate to="/dashboard" replace />;
+    }
+
     
-    // Redirect to dashboard for others
-    return <Navigate to="/dashboard" replace />;
+    // Redirect Super Admin to dashboard
+    return <Navigate to="/cars" replace />;
   }
 
   return <>{children}</>;

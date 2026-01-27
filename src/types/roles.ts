@@ -1,7 +1,8 @@
-// Role definitions
+// Role definitions - 3 roles only
 export enum UserRole {
-  ADMIN = 'admin',
-  BUSINESS = 'business',
+  SUPER_ADMIN = 'super-admin',  // Can access /dashboard
+  ADMIN = 'admin',              // Goes to /cars
+  EMPLOYEE = 'employee',        // Goes to /cars
 }
 
 // Route permissions
@@ -13,21 +14,22 @@ export interface RoutePermission {
 
 // Define which routes each role can access
 export const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
-  // Admin only routes
-  '/dashboard': [UserRole.ADMIN],
-  '/users': [UserRole.ADMIN],
-  '/agency-management': [UserRole.ADMIN],
-  '/settings/faq': [UserRole.ADMIN],
+  // Super Admin only routes
+  '/dashboard': [UserRole.SUPER_ADMIN],
+  '/users': [UserRole.SUPER_ADMIN],
+  '/agency-management': [UserRole.SUPER_ADMIN],
+  '/settings/faq': [UserRole.SUPER_ADMIN],
+  '/transactions-history': [UserRole.SUPER_ADMIN],
   
-  // Shared routes (both can access but with filtered data)
-  '/transactions-history': [UserRole.ADMIN, UserRole.BUSINESS],
-  '/cars': [UserRole.ADMIN, UserRole.BUSINESS],
-  '/booking-management': [UserRole.ADMIN, UserRole.BUSINESS],
-  '/calender': [UserRole.ADMIN, UserRole.BUSINESS],
+  // Shared routes (all can access)
+  '/cars': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE],
+  '/booking-management': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE],
+  '/calender': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE],
+  '/clients': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE],
   
-  // Settings - accessible to both
-  '/settings/profile': [UserRole.ADMIN, UserRole.BUSINESS],
-  '/settings/password': [UserRole.ADMIN, UserRole.BUSINESS],
+  // Settings - accessible to all
+  '/settings/profile': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE],
+  '/settings/password': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE],
 };
 
 // Helper function to check if user has access to a route
@@ -53,12 +55,12 @@ export const hasRouteAccess = (userRole: string, routePath: string): boolean => 
 // Helper to check if route should show filtered data
 export const shouldFilterData = (userRole: string, routePath: string): boolean => {
   const sharedRoutes = [
-    '/transactions-history',
     '/cars',
     '/booking-management',
     '/calender',
   ];
   
-  return userRole === UserRole.BUSINESS && 
+  // Admin and Employee see filtered data
+  return (userRole === UserRole.ADMIN || userRole === UserRole.EMPLOYEE) && 
          sharedRoutes.some(route => routePath.startsWith(route));
 };

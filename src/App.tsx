@@ -7,7 +7,7 @@ import AuthLayout from '@/components/layout/AuthLayout'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { RoleBasedRoute } from '@/components/auth/RoleBasedRoute'
 import { UserRole } from '@/types/roles'
-import { useAppDispatch } from '@/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { loadUserFromStorage } from '@/redux/slices/authSlice'
 
 // Auth Pages
@@ -31,6 +31,30 @@ import Calender from './pages/calender/Calender'
 import TransactionsHistory from './pages/transictions-history/TransactionsHistory'
 import FAQ from './pages/FAQ/FAQ'
 import NotFound from './pages/NotFound/NotFound'
+
+// Component to redirect based on user role
+function RoleBasedRedirect() {
+  const { user } = useAppSelector((state) => state.auth)
+  
+  // 🔍 Console log for debugging
+  console.log('🔄 RoleBasedRedirect Debug:')
+  console.log('User:', user)
+  console.log('User Role:', user?.role)
+  
+  if (!user) {
+    console.log('❌ No user, redirecting to /auth/login')
+    return <Navigate to="/auth/login" replace />
+  }
+
+  // Super Admin -> /dashboard, Admin/Employee -> /cars
+  if (user.role === 'super-admin') {
+    console.log('✅ Super Admin, redirecting to /dashboard')
+    return <Navigate to="/dashboard" replace />
+  } else {
+    console.log('✅ Admin/Employee, redirecting to /cars')
+    return <Navigate to="/cars" replace />
+  }
+}
 
 function App() {
   const dispatch = useAppDispatch()
@@ -61,23 +85,23 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route index element={<RoleBasedRedirect />} />
           
-          {/* Admin Only Routes */}
+          {/* Super Admin Only Routes */}
           <Route 
             path="dashboard" 
             element={
-              <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+              <RoleBasedRoute allowedRoles={[UserRole.SUPER_ADMIN]}>
                 <Dashboard />
               </RoleBasedRoute>
             } 
           />
           
-          {/* User Management - Admin Only */}
+          {/* User Management - Super Admin Only */}
           <Route 
             path="users" 
             element={
-              <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+              <RoleBasedRoute allowedRoles={[UserRole.SUPER_ADMIN]}>
                 <UserList />
               </RoleBasedRoute>
             } 
@@ -85,58 +109,58 @@ function App() {
           <Route 
             path="users/:id" 
             element={
-              <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+              <RoleBasedRoute allowedRoles={[UserRole.SUPER_ADMIN]}>
                 <UserDetails />
               </RoleBasedRoute>
             } 
           />
           
-          {/* Agency Management - Admin Only */}
+          {/* Agency Management - Super Admin Only */}
           <Route 
             path="agency-management" 
             element={
-              <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+              <RoleBasedRoute allowedRoles={[UserRole.SUPER_ADMIN]}>
                 <AgencyManagement />
               </RoleBasedRoute>
             } 
           />
           
-          {/* Shared Routes - Both can access but with filtered data */}
+          {/* Transactions History - Super Admin Only */}
+          <Route 
+            path="transactions-history" 
+            element={
+              <RoleBasedRoute allowedRoles={[UserRole.SUPER_ADMIN]}>
+                <TransactionsHistory />
+              </RoleBasedRoute>
+            } 
+          />
+          
+          {/* Shared Routes - All roles can access */}
           <Route 
             path="booking-management" 
             element={
-              <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.BUSINESS]}>
+              <RoleBasedRoute allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE]}>
                 <BookingManagement />
               </RoleBasedRoute>
             } 
           />
           
-          {/* Car Management - Both can access */}
+          {/* Car Management - All roles can access */}
           <Route 
             path="cars" 
             element={
-              <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.BUSINESS]}>
+              <RoleBasedRoute allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE]}>
                 <CarList />
               </RoleBasedRoute>
             } 
           />
           
-          {/* Calendar - Both can access */}
+          {/* Calendar - All roles can access */}
           <Route 
             path="calender" 
             element={
-              <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.BUSINESS]}>
+              <RoleBasedRoute allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE]}>
                 <Calender />
-              </RoleBasedRoute>
-            } 
-          />
-          
-          {/* Transactions History - Both can access */}
-          <Route 
-            path="transactions-history" 
-            element={
-              <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.BUSINESS]}>
-                <TransactionsHistory />
               </RoleBasedRoute>
             } 
           />
@@ -159,7 +183,7 @@ function App() {
             <Route 
               path="faq" 
               element={
-                <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
+                <RoleBasedRoute allowedRoles={[UserRole.SUPER_ADMIN]}>
                   <FAQ />
                 </RoleBasedRoute>
               } 

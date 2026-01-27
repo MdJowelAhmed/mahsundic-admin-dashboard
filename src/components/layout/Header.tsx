@@ -17,6 +17,12 @@ import { getInitials } from '@/utils/formatters'
 
 const routeTitles: Record<string, string> = {
   '/dashboard': 'Dashboard',
+  '/cars': 'Car List',
+  '/booking-management': 'Booking Management',
+  '/calender': 'Calendar',
+  '/transactions-history': 'Transactions History',
+  '/client-management': 'Client Management',
+  '/agency-management': 'Agency Management',
   '/users': 'User Management',
   '/products': 'Product Management',
   '/categories': 'Category Management',
@@ -113,7 +119,7 @@ export function Header() {
                 <Avatar className="h-12 w-12">
                   <AvatarImage src={user?.avatar} />
                   <AvatarFallback className="text-white bg-primary" >
-                    {user ? getInitials(user.firstName, user.lastName) : 'AD'}
+                    {getInitials(user?.firstName, user?.lastName)}
                   </AvatarFallback>
                 </Avatar>
               </Button>

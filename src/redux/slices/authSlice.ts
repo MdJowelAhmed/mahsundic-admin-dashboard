@@ -6,9 +6,9 @@ interface User {
   firstName: string
   lastName: string
   avatar?: string
-  role: 'admin' | 'business'
-  businessId?: string // Only for business users
-  businessName?: string // Only for business users
+  role: 'super-admin' | 'admin' | 'employee'  // 3 roles only
+  businessId?: string
+  businessName?: string
 }
 
 interface AuthState {

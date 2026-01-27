@@ -38,49 +38,47 @@ const navItems: NavItem[] = [
     title: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
-    allowedRoles: [UserRole.ADMIN], // Admin only
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
-  {
-    title: 'Booking Management',
-    href: '/booking-management',
-    icon: ListOrdered,
-    allowedRoles: [UserRole.ADMIN, UserRole.BUSINESS], // Both can access
-  },
-  {
-    title: 'Users',
-    href: '/users',
-    icon: Users,
-    allowedRoles: [UserRole.ADMIN], // Admin only
-  },
+
   {
     title: 'Car List',
     href: '/cars',
     icon: Car,
-    allowedRoles: [UserRole.ADMIN, UserRole.BUSINESS], // Both can access
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
+  
+  {
+    title: 'Booking Management',
+    href: '/booking-management',
+    icon: ListOrdered,
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
+  },
+
+
   {
     title: 'Agency Management',
     href: '/agency-management',
     icon: Building,
-    allowedRoles: [UserRole.ADMIN], // Admin only
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
   {
     title: 'Calendar',
     href: '/calender',
     icon: Calendar,
-    allowedRoles: [UserRole.ADMIN, UserRole.BUSINESS], // Both can access
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
   {
     title: 'Transactions History',
     href: '/transactions-history',
     icon: CreditCard,
-    allowedRoles: [UserRole.ADMIN, UserRole.BUSINESS], // Both can access
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
   {
     title: 'Client Management',
     href: '/clients',
     icon: Users,
-    // No role restriction - accessible to all
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
 ]
 
@@ -89,33 +87,31 @@ const settingsItems: NavItem[] = [
     title: 'Profile',
     href: '/settings/profile',
     icon: User,
-    // Accessible to all
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
   {
     title: 'Password',
     href: '/settings/password',
     icon: Lock,
-    // Accessible to all
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
   {
     title: 'Terms',
     href: '/settings/terms',
     icon: FileText,
-    allowedRoles: [UserRole.ADMIN], // Admin only
-    // Accessible to all
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
   {
     title: 'Privacy',
     href: '/settings/privacy',
     icon: Shield,
-    allowedRoles: [UserRole.ADMIN], // Admin only
-    // Accessible to all
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
   {
     title: 'FAQ',
     href: '/settings/faq',
     icon: HelpCircle,
-    allowedRoles: [UserRole.ADMIN], // Admin only
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
 ]
 
@@ -127,11 +123,19 @@ export function Sidebar() {
 
   const isSettingsActive = location.pathname.startsWith('/settings')
 
+  // 🔍 Console log for debugging
+  console.log('📊 Sidebar Debug Info:');
+  console.log('User:', user);
+  console.log('User Role:', user?.role);
+  console.log('User Role Type:', typeof user?.role);
+
   // Filter navigation items based on user role
   const filteredNavItems = navItems.filter((item) => {
     if (!item.allowedRoles) return true // No restriction
     if (!user) return false
-    return item.allowedRoles.includes(user.role as UserRole)
+    const hasAccess = item.allowedRoles.includes(user.role as UserRole)
+    console.log(`🔐 ${item.title}: hasAccess=${hasAccess}, userRole=${user.role}, allowedRoles=${item.allowedRoles.join(', ')}`)
+    return hasAccess
   })
 
   const filteredSettingsItems = settingsItems.filter((item) => {

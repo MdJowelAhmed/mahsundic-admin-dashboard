@@ -53,10 +53,18 @@ export function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
 }
 
-export function getInitials(firstName: string, lastName?: string): string {
-  const first = firstName.charAt(0).toUpperCase()
-  const last = lastName ? lastName.charAt(0).toUpperCase() : ''
-  return first + last
+export function getInitials(firstName?: string, lastName?: string): string {
+  // Handle undefined, null, or empty strings
+  const first = firstName && firstName.trim() ? firstName.charAt(0).toUpperCase() : ''
+  const last = lastName && lastName.trim() ? lastName.charAt(0).toUpperCase() : ''
+  
+  // If we have at least one initial, return it
+  if (first || last) {
+    return first + last
+  }
+  
+  // Fallback to 'U' for User if nothing is available
+  return 'U'
 }
 
 export function formatFileSize(bytes: number): string {
