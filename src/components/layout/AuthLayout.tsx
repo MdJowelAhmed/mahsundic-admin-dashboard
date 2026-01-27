@@ -57,10 +57,17 @@ export default function AuthLayout() {
             {/* Features */}
             <div className="space-y-4">
               {[
-                'User & Role Management',
-                'Product & Inventory Control',
-                'Real-time Analytics',
-                'Secure Authentication',
+                "Analytics",
+                "Booking Management",
+                "Agency Management",
+                "Calendar",
+                "Transactions History",
+                "Client Management",
+                "Car Management",
+                // 'User & Role Management',
+                // 'Product & Inventory Control',
+                // 'Real-time Analytics',
+                // 'Secure Authentication',
               ].map((feature, index) => (
                 <motion.div
                   key={feature}

@@ -1,0 +1,18 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "frontend",
+    "main",
+    "withoutRole"
+  ],
+  "parent": {
+    "frontend": "main",
+    "main": null,
+    "withoutRole": "main"
+  },
+  "order": [
+    "main",
+    "frontend",
+    "withoutRole"
+  ]
+}
