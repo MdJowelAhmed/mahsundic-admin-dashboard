@@ -23,12 +23,14 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { toggleSidebar } from '@/redux/slices/uiSlice'
 import { cn } from '@/utils/cn'
+import { UserRole } from '@/types/roles'
 
 interface NavItem {
   title: string
   href: string
   icon: React.ElementType
   children?: NavItem[]
+  allowedRoles?: UserRole[] // If not specified, accessible to all
 }
 
 const navItems: NavItem[] = [
@@ -36,51 +38,47 @@ const navItems: NavItem[] = [
     title: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
-  {
-    title: 'Booking-management',
-    href: '/booking-management',
-    icon: ListOrdered,
-  },
-  // {
-  //   title: 'Users',
-  //   href: '/users',
-  //   icon: Users,
-  // },
-  // {
-  //   title: 'Products',
-  //   href: '/products',
-  //   icon: Package,
-  // },
-  // {
-  //   title: 'Categories',
-  //   href: '/categories',
-  //   icon: FolderTree,
-  // },
+
   {
     title: 'Car List',
     href: '/cars',
     icon: Car,
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
+  
+  {
+    title: 'Booking Management',
+    href: '/booking-management',
+    icon: ListOrdered,
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
+  },
+
+
   {
     title: 'Agency Management',
     href: '/agency-management',
     icon: Building,
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, ], // Super Admin only
   },
   {
-    title: 'Calender',
+    title: 'Calendar',
     href: '/calender',
     icon: Calendar,
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
   {
     title: 'Transactions History',
     href: '/transactions-history',
     icon: CreditCard,
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
   {
     title: 'Client Management',
     href: '/clients',
     icon: Users,
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
 ]
 
@@ -89,35 +87,62 @@ const settingsItems: NavItem[] = [
     title: 'Profile',
     href: '/settings/profile',
     icon: User,
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
   {
     title: 'Password',
     href: '/settings/password',
     icon: Lock,
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE], // All can access
   },
   {
     title: 'Terms',
     href: '/settings/terms',
     icon: FileText,
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
   {
     title: 'Privacy',
     href: '/settings/privacy',
     icon: Shield,
+    allowedRoles: [UserRole.SUPER_ADMIN], // Super Admin only
   },
   {
     title: 'FAQ',
     href: '/settings/faq',
     icon: HelpCircle,
+    allowedRoles: [UserRole.SUPER_ADMIN, UserRole.ADMIN], // Super Admin only
   },
 ]
 
 export function Sidebar() {
   const dispatch = useAppDispatch()
   const { sidebarCollapsed } = useAppSelector((state) => state.ui)
+  const { user } = useAppSelector((state) => state.auth)
   const location = useLocation()
 
   const isSettingsActive = location.pathname.startsWith('/settings')
+
+  // 🔍 Console log for debugging
+  console.log('📊 Sidebar Debug Info:');
+  console.log('User:', user);
+  console.log('User Role:', user?.role);
+  console.log('User Role Type:', typeof user?.role);
+
+  // Filter navigation items based on user role
+  const filteredNavItems = navItems.filter((item) => {
+    if (!item.allowedRoles) return true // No restriction
+    if (!user) return false
+    const hasAccess = item.allowedRoles.includes(user.role as UserRole)
+    console.log(`🔐 ${item.title}: hasAccess=${hasAccess}, userRole=${user.role}, allowedRoles=${item.allowedRoles.join(', ')}`)
+    return hasAccess
+  })
+
+  const filteredSettingsItems = settingsItems.filter((item) => {
+    if (!item.allowedRoles) return true // No restriction
+    if (!user) return false
+    return item.allowedRoles.includes(user.role as UserRole)
+  })
 
   return (
     <>
@@ -175,7 +200,7 @@ export function Sidebar() {
                 Main Menu
               </p>
             )}
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <SidebarNavItem
                 key={item.href}
                 item={item}
@@ -219,7 +244,7 @@ export function Sidebar() {
                 <TooltipContent side="right">Settings</TooltipContent>
               </Tooltip>
             ) : (
-              settingsItems.map((item) => (
+              filteredSettingsItems.map((item) => (
                 <SidebarNavItem
                   key={item.href}
                   item={item}
