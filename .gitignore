@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
+.vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -26,23 +27,8 @@ dist-ssr
 coverage
 
 # Env files
+.env
+.env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-
-
-
-
-
-
-
-
-
-
-
-
-config.bat
-branch_structure.json
-temp_auto_push.bat
-temp_interactive_push.bat
